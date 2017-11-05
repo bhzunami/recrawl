@@ -18,7 +18,15 @@ class CoordinatesPipeline(object):
     def process_item(self, item, spider):
         """after item is processed
         """
-        logging.debug("Get Longitude and Latitude for item {} from spider {}".format(item.get('place', None),spider.name))
+        logging.debug("Get Longitude and Latitude for item %s %s from spider %s",
+                      item.get('street', None),
+                      item.get('place', None),
+                      spider.name)
+
+        if 'auf anfrage' in item.get('street', '').lower():
+            logging.info("Ignore street %s for finding coordinates", item.get('street', None))
+            item['street'] = ''
+
         params = {'type': 'locations',
                   'limit': 1,
                   'searchText': '{} {}'.format(item.get('street', ''), item.get('place', ''))}
@@ -32,8 +40,10 @@ class CoordinatesPipeline(object):
 
         # At the moment always get frist element
         response = req.json()
+        item['address_fuzzy'] = False
         if response.get("fuzzy", False):
-            logging.info("Request for address {} seems fuzzy".format(params.get('searchText', '')))
+            item['address_fuzzy'] = True
+            logging.info("Request for address %s seems fuzzy", params.get('searchText', ''))
 
         addresses = response.get('results', [])
         # Did not get an answer

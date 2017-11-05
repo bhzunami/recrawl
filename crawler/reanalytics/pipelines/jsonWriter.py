@@ -20,7 +20,7 @@ class JSONWriterPipeline(object):
     def open_spider(self, spider):
         """once when spider is started
         """
-        self.file = open('items.jl', 'wb')
+        self.file = open('items.json', 'wb')
 
     def close_spider(self, spider):
         """called when spider is closed

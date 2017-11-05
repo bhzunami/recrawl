@@ -4,7 +4,7 @@
 import json
 import datetime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Float, Date, DateTime, ForeignKey, JSON
+from sqlalchemy import Column, Integer, String, Float, Date, Boolean, DateTime, ForeignKey, JSON
 from .utils import get_int, get_float, get_date, Base, maybe_street
 from sqlalchemy.orm import relationship
 from . import Municipality, ObjectType
@@ -48,6 +48,7 @@ class Advertisement(Base):
     lv03_easting = Column(Float)
     lv03_northing = Column(Float)
     noise_level = Column(Float)
+    address_fuzzy = Column(Boolean)
 
     tags = Column(JSON) # JSON list of tags
 
@@ -75,6 +76,7 @@ class Advertisement(Base):
         self.assign(data, 'longitude')
         self.assign(data, 'latitude')
         self.assign(data, 'quality_label')
+        self.assign(data, 'address_fuzzy')
 
         self.crawled_at = self.crawled_at or datetime.datetime.now()
         self.last_seen = self.last_seen or datetime.datetime.now()

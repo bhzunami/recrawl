@@ -1,58 +1,58 @@
-id;name;grouping
+id;name;category
 1;maisonette / duplex;wohnung
-5;doppeleinfamilienhaus;haus
-9;reihenfamilienhaus;haus
-12;hobbyraum;raum
-17;möbliertes wohnobjekt;wohnung
-21;kellerabteil;raum
-23;stöckli;wohnung
-24;höhlen- / erdhaus;haus
-26;maisonette;wohnung
-27;einfamilienhaus;haus
-28;villa;haus
-29;wohnung;wohnung
-30;doppel;haus
-31;terrassenwohnung;wohnung
-32;attikawohnung;wohnung
-33;bauernhaus;haus
-34;dachwohnung;wohnung
-95;stadthaus;
-35;duplex;wohnung
-36;reihen;haus
-37;neubauwohnung;wohnung
-38;chalet;haus
-39;studio;raum
-40;terrassenhaus;haus
-41;reihenhaus;haus
-43;stoeckli;wohnung
-44;villa / schloss;haus
-45;hoehlen;haus
-46;loft;haus
-47;moebliertes;wohnung
-48;einzelzimmer;raum
-49;mehrfamilienhaus;haus
-50;etagenwohnung;wohnung
-51;reihenendhaus;haus
-52;reiheneckhaus;haus
-53;haus;haus
-54;erdgeschosswohnung;wohnung
-55;bauland;ignore
-56;doppelhaushälfte;haus
-57;reihenmittehaus;haus
-58;ferienhaus;haus
-59;landhaus;haus
-60;ferienwohnung;wohnung
-61;rustico;haus
-62;einliegerwohnung;wohnung
-63;mansarde;wohnung
-64;schloss;haus
-67;strandhaus;haus
-70;möblierte wohnung;wohnung
-71;galeriewohnung;wohnung
-72;studio/zimmer;raum
-73;renditeobjekt;ignore
-74;möbl. wohnobjekt;wohnung
-75;resthof;ignore
-76;altbauwohnung;wohnung
-77;berghütte;haus
-78;souterrain;wohnung
+2;doppeleinfamilienhaus;haus
+3;reihenfamilienhaus;haus
+4;hobbyraum;raum
+5;möbliertes wohnobjekt;wohnung
+6;kellerabteil;raum
+7;stöckli;wohnung
+8;höhlen- / erdhaus;haus
+9;maisonette;wohnung
+10;einfamilienhaus;haus
+11;villa;haus
+12;wohnung;wohnung
+13;doppel;haus
+14;terrassenwohnung;wohnung
+15;attikawohnung;wohnung
+16;bauernhaus;haus
+17;dachwohnung;wohnung
+18;stadthaus;
+19;duplex;wohnung
+20;reihen;haus
+21;neubauwohnung;wohnung
+22;chalet;haus
+23;studio;raum
+24;terrassenhaus;haus
+25;reihenhaus;haus
+26;stoeckli;wohnung
+27;villa / schloss;haus
+28;hoehlen;haus
+29;loft;haus
+30;moebliertes;wohnung
+31;einzelzimmer;raum
+32;mehrfamilienhaus;haus
+33;etagenwohnung;wohnung
+34;reihenendhaus;haus
+35;reiheneckhaus;haus
+36;haus;haus
+37;erdgeschosswohnung;wohnung
+38;bauland;ignore
+39;doppelhaushälfte;haus
+40;reihenmittehaus;haus
+41;ferienhaus;haus
+42;landhaus;haus
+43;ferienwohnung;wohnung
+44;rustico;haus
+45;einliegerwohnung;wohnung
+46;mansarde;wohnung
+47;schloss;haus
+48;strandhaus;haus
+49;möblierte wohnung;wohnung
+50;galeriewohnung;wohnung
+51;studio/zimmer;raum
+52;renditeobjekt;ignore
+53;möbl. wohnobjekt;wohnung
+54;resthof;ignore
+55;altbauwohnung;wohnung
+56;berghütte;haus
+57;souterrain;wohnung

@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 9.6.1
--- Dumped by pg_dump version 9.6.5
+-- Dumped by pg_dump version 10.0
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -13,59 +13,16 @@ SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
-
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
-SET search_path = public, pg_catalog;
-
---
--- Name: jsonb_merge(jsonb, jsonb); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION jsonb_merge(jsonb1 jsonb, jsonb2 jsonb) RETURNS jsonb
-    LANGUAGE plpgsql
-    AS $$
-    DECLARE
-      result JSONB;
-      v RECORD;
-    BEGIN
-       result = (
-    SELECT json_object_agg(KEY,value)
-    FROM
-      (SELECT jsonb_object_keys(jsonb1) AS KEY,
-              1::int AS jsb,
-              jsonb1 -> jsonb_object_keys(jsonb1) AS value
-       UNION SELECT jsonb_object_keys(jsonb2) AS KEY,
-                    2::int AS jsb,
-                    jsonb2 -> jsonb_object_keys(jsonb2) AS value ) AS t1
-           );
-       RETURN result;
-    END;
-    $$;
-
-
 SET default_tablespace = '';
-
 SET default_with_oids = false;
 
 --
+-- TOC entry 186 (class 1259 OID 16611)
 -- Name: advertisements; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE advertisements (
-    id integer NOT NULL,
+    id SERIAL NOT NULL PRIMARY KEY,
     crawled_at timestamp without time zone NOT NULL,
     raw_data text NOT NULL,
     crawler character varying(100) NOT NULL,
@@ -103,16 +60,18 @@ CREATE TABLE advertisements (
     last_reprocessed date,
     lv03_easting double precision,
     lv03_northing double precision,
-    noise_level double precision
+    noise_level double precision,
+    address_fuzzy boolean
 );
 
 
 --
+-- TOC entry 187 (class 1259 OID 16620)
 -- Name: municipalities; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE municipalities (
-    id integer NOT NULL,
+    id SERIAL NOT NULL PRIMARY KEY,
     zip integer NOT NULL,
     bfsnr integer NOT NULL,
     name character varying(100) NOT NULL,
@@ -148,174 +107,44 @@ CREATE TABLE municipalities (
 
 
 --
+-- TOC entry 189 (class 1259 OID 16649)
 -- Name: object_types; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE object_types (
-    id integer NOT NULL,
+    id SERIAL NOT NULL PRIMARY KEY,
     name character varying(100) NOT NULL,
-    "grouping" character varying(50)
+    category character varying(50)
 );
 
+--
+-- Create Index on important cols
+--
+CREATE UNIQUE INDEX crawler_index ON advertisements (crawler);
+CREATE UNIQUE INDEX url_index ON advertisements (url);
+CREATE INDEX zip_index ON municipalities (zip);
+CREATE UNIQUE INDEX object_index ON object_types (name);
 
 --
--- Name: ad_view; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+-- Set next autoincrement index because copy does not set the index
+-- 
+ALTER SEQUENCE object_types_id_seq RESTART WITH 58;
+ALTER SEQUENCE municipalities_id_seq RESTART WITH 4935;
 --
-
-CREATE MATERIALIZED VIEW ad_view AS
- SELECT a.id,
-    a.living_area,
-    a.floor,
-    a.price_brutto,
-    ((((a.price_brutto)::double precision / a.living_area))::numeric)::integer AS price_brutto_m2,
-    a.build_year,
-        CASE
-            WHEN (a.last_renovation_year IS NULL) THEN 0
-            ELSE 1
-        END AS was_renovated,
-        CASE
-            WHEN ((a.build_year)::double precision >= date_part('year'::text, ('now'::text)::date)) THEN (0)::double precision
-            WHEN ((a.last_renovation_year)::double precision >= date_part('year'::text, ('now'::text)::date)) THEN (0)::double precision
-            WHEN (a.last_renovation_year IS NULL) THEN (date_part('year'::text, ('now'::text)::date) - (a.build_year)::double precision)
-            ELSE (date_part('year'::text, ('now'::text)::date) - (a.last_renovation_year)::double precision)
-        END AS last_construction,
-    a.num_rooms,
-    (a.living_area / a.num_rooms) AS avg_room_area,
-    o.name AS otype,
-    o."grouping" AS ogroup,
-    ((m.zip || ' '::text) || (m.name)::text) AS municipality,
-    m.canton_id,
-    m.district_id,
-    m.mountain_region_id,
-    m.language_region_id,
-    m.job_market_region_id,
-    m.agglomeration_id,
-    m.metropole_region_id,
-    m.tourism_region_id,
-    m.is_town,
-    m.lat,
-    m.long,
-    a.crawler,
-    a.tags
-   FROM ((advertisements a
-     JOIN object_types o ON ((o.id = a.object_types_id)))
-     JOIN municipalities m ON ((m.id = a.municipalities_id)))
-  WHERE ((a.price_brutto IS NOT NULL) AND (a.price_brutto > 10) AND ((o."grouping")::text <> 'ignore'::text) AND (a.living_area IS NOT NULL) AND (a.living_area > (0)::double precision) AND (a.build_year > 1200) AND (a.floor < 100) AND (a.num_rooms IS NOT NULL) AND (a.num_rooms > (0)::double precision) AND ((a.last_renovation_year IS NULL) OR ((a.last_renovation_year - a.build_year) > '-10'::integer)) AND ((date_part('year'::text, ('now'::text)::date) + (5)::double precision) > (a.build_year)::double precision))
-  WITH NO DATA;
-
-
---
--- Name: advertisements_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE advertisements_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: advertisements_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE advertisements_id_seq OWNED BY advertisements.id;
-
-
---
--- Name: avg_room_area_by_num_rooms; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW avg_room_area_by_num_rooms AS
- SELECT ad_view.num_rooms,
-    avg(ad_view.avg_room_area) AS avg_avg,
-    count(*) AS cnt_ads
-   FROM ad_view
-  GROUP BY ad_view.num_rooms
-  ORDER BY ad_view.num_rooms
-  WITH NO DATA;
-
-
---
--- Name: object_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE object_types_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: object_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE object_types_id_seq OWNED BY object_types.id;
-
-
---
--- Name: advertisements id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY advertisements ALTER COLUMN id SET DEFAULT nextval('advertisements_id_seq'::regclass);
-
-
---
--- Name: object_types id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY object_types ALTER COLUMN id SET DEFAULT nextval('object_types_id_seq'::regclass);
-
-
---
--- Name: advertisements advertisements_pk; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY advertisements
-    ADD CONSTRAINT advertisements_pk PRIMARY KEY (id);
-
-
---
--- Name: municipalities municipalities_pk; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY municipalities
-    ADD CONSTRAINT municipalities_pk PRIMARY KEY (id);
-
-
---
--- Name: object_types object_type_pk; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY object_types
-    ADD CONSTRAINT object_type_pk PRIMARY KEY (id);
-
-
---
--- Name: iCrawler; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX "iCrawler" ON advertisements USING hash (crawler varchar_ops);
-
-
---
+-- TOC entry 2035 (class 2606 OID 30328)
 -- Name: advertisements advertisements_municipalities; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advertisements
     ADD CONSTRAINT advertisements_municipalities FOREIGN KEY (municipalities_id) REFERENCES municipalities(id);
 
-
 --
+-- TOC entry 2034 (class 2606 OID 16655)
 -- Name: advertisements input_property_object_type; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advertisements
     ADD CONSTRAINT input_property_object_type FOREIGN KEY (object_types_id) REFERENCES object_types(id);
-
 
 --
 -- PostgreSQL database dump complete

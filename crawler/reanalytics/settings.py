@@ -67,7 +67,7 @@ ITEM_PIPELINES = {
     'reanalytics.pipelines.duplicateCheck.DuplicateCheckPipeline': 130,
     'reanalytics.pipelines.coordinates.CoordinatesPipeline': 140,
     #'crawler.pipelines.databaseWriter.DatabaseWriterPipeline': 200,
-    #'crawler.pipelines.jsonWriter.JSONWriterPipeline': 300,
+    'reanalytics.pipelines.jsonWriter.JSONWriterPipeline': 300,
 }
 
 
@@ -95,7 +95,7 @@ ITEM_PIPELINES = {
 
 # OWN SETTINGS:
 DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://localhost:5432/immo')
-
+LOG_ENABLED = True
 # FIELDS
 KEY_FIGURES = {
     'Verkaufspreis': 'price_brutto',  # homegate, immoscout24
