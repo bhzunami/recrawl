@@ -1,3 +1,9 @@
+
+"""
+https://github.com/fabienvauchelles/scrapoxy-python-api/blob/master/scrapoxy/downloadmiddlewares/scale.py
+
+https://github.com/fabienvauchelles/scrapoxy-python-api/blob/master/scrapoxy/commander.py
+"""
 import time
 import logging
 import scrapy
