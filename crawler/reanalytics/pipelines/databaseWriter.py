@@ -21,6 +21,7 @@ class DatabaseWriterPipeline(object):
         Initializes database connection and sessionmaker.
         Creates deals table.
         """
+        logger.info("Open spider Database wirter")
         engine = create_engine(DATABASE_URL)
         self.Session = sessionmaker(bind=engine)
 

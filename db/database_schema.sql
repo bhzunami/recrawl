@@ -24,7 +24,7 @@ SET default_with_oids = false;
 CREATE TABLE advertisements (
     id SERIAL NOT NULL PRIMARY KEY,
     crawled_at timestamp without time zone NOT NULL,
-    raw_data text NOT NULL,
+    -- raw_data text NOT NULL,
     crawler character varying(100) NOT NULL,
     url character varying(255) NOT NULL,
     reference_no character varying(100),
@@ -61,7 +61,8 @@ CREATE TABLE advertisements (
     lv03_easting double precision,
     lv03_northing double precision,
     noise_level double precision,
-    address_fuzzy boolean
+    address_fuzzy boolean,
+    buy boolean
 );
 
 
@@ -120,8 +121,9 @@ CREATE TABLE object_types (
 --
 -- Create Index on important cols
 --
-CREATE UNIQUE INDEX crawler_index ON advertisements (crawler);
+CREATE INDEX crawler_index ON advertisements (crawler);
 CREATE UNIQUE INDEX url_index ON advertisements (url);
+CREATE INDEX buy_index ON advertisements (buy);
 CREATE INDEX zip_index ON municipalities (zip);
 CREATE UNIQUE INDEX object_index ON object_types (name);
 

@@ -10,6 +10,16 @@ BOT_NAME = 'reanalytics'
 SPIDER_MODULES = ['reanalytics.spiders']
 NEWSPIDER_MODULE = 'reanalytics.spiders'
 
+# OWN SETTINGS:
+DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://localhost:5432/immo')
+LOG_ENABLED = True
+LOG_LEVEL = 'INFO'
+
+PROXY = os.environ.get('PROXY', 'http://127.0.0.1:8888/?noconnect') 
+API_SCRAPOXY = os.environ.get('API_SCRAPOXY', 'http://127.0.0.1:8889/api')
+API_SCRAPOXY_PASSWORD = os.environ.get('API_SCRAPOXY_PASSWORD', 'CHANGE_THIS_PASSWORD')
+WAIT_FOR_SCALE = os.environ.get('WAIT_FOR_SCALE', 5)
+WAIT_FOR_START = os.environ.get('WAIT_FOR_START', 5)
 ADMIN_BASE_URL = 'https://api3.geo.admin.ch/rest/services/api/SearchServer'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -49,13 +59,21 @@ TELNETCONSOLE_ENABLED = False
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'reanalytics.middlewares.MyCustomDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    'reanalytics.middlewares.crawledURLCheck.CrawledURLCheck': 100,
+    'scrapoxy.downloadmiddlewares.proxy.ProxyMiddleware': 101,
+    'scrapoxy.downloadmiddlewares.wait.WaitMiddleware': 102,
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
+}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
 #EXTENSIONS = {
+#    'scrapy.extensions.telnet.TelnetConsole': None,
+#}
+
+#EXTENSIONS = {
+#    'reanalytics.extensions.simpleStatsextension.SimpleStats': 100,
 #    'scrapy.extensions.telnet.TelnetConsole': None,
 #}
 
@@ -66,8 +84,8 @@ ITEM_PIPELINES = {
     'reanalytics.pipelines.objectTypeFinder.ObjectTypeFinderPipeline': 120,
     'reanalytics.pipelines.duplicateCheck.DuplicateCheckPipeline': 130,
     'reanalytics.pipelines.coordinates.CoordinatesPipeline': 140,
-    #'crawler.pipelines.databaseWriter.DatabaseWriterPipeline': 200,
-    'reanalytics.pipelines.jsonWriter.JSONWriterPipeline': 300,
+    'reanalytics.pipelines.databaseWriter.DatabaseWriterPipeline': 200,
+    # 'reanalytics.pipelines.jsonWriter.JSONWriterPipeline': 300,
 }
 
 
@@ -92,10 +110,6 @@ ITEM_PIPELINES = {
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-
-# OWN SETTINGS:
-DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://localhost:5432/immo')
-LOG_ENABLED = True
 # FIELDS
 KEY_FIGURES = {
     'Verkaufspreis': 'price_brutto',  # homegate, immoscout24

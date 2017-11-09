@@ -17,8 +17,10 @@ class MunicipalityFinderPipeline(object):
         Initializes database connection and sessionmaker.
         Creates deals table.
         """
+        logging.info("Open spider Municipality")
         engine = create_engine(DATABASE_URL)
         self.Session = sessionmaker(bind=engine, expire_on_commit=True)
+        self.session = None
 
 
     def process_item(self, item, spider):

@@ -49,6 +49,7 @@ class Advertisement(Base):
     lv03_northing = Column(Float)
     noise_level = Column(Float)
     address_fuzzy = Column(Boolean)
+    buy = Column(Boolean)
 
     tags = Column(JSON) # JSON list of tags
 
@@ -77,6 +78,7 @@ class Advertisement(Base):
         self.assign(data, 'latitude')
         self.assign(data, 'quality_label')
         self.assign(data, 'address_fuzzy')
+        self.assign(data, 'buy')
 
         self.crawled_at = self.crawled_at or datetime.datetime.now()
         self.last_seen = self.last_seen or datetime.datetime.now()
@@ -108,4 +110,4 @@ class Advertisement(Base):
         # Set jsons
         self.characteristics = json.dumps(data.get('characteristics', None)) or self.characteristics
         self.additional_data = json.dumps(data.get('additional_data', None)) or self.additional_data
-        self.tags = json.loads(data.get('tags', None)) or self.tags or []
+        self.tags = json.loads(data.get('tags', '[]')) or self.tags or []

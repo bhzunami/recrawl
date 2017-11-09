@@ -24,7 +24,7 @@ class CrawledURLCheck(object):
             return
 
         clean_url = spider.get_clean_url(request.url)
-        logging.debug("Check if %s is already in database", clean_url)
+        logging.debug("Check if %s is already in database?", clean_url)
         session = self.Session()
         advertisement = session.query(Advertisement).filter(Advertisement.url == clean_url).first()
         if advertisement:

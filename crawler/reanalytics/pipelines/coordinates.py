@@ -23,7 +23,7 @@ class CoordinatesPipeline(object):
                       item.get('place', None),
                       spider.name)
 
-        if 'auf anfrage' in item.get('street', '').lower():
+        if not item.get('street', None) or 'auf anfrage' in item.get('street', '').lower():
             logging.info("Ignore street %s for finding coordinates", item.get('street', None))
             item['street'] = ''
 

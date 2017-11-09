@@ -48,6 +48,7 @@ class Ad(scrapy.Item):
     lv03_easting = scrapy.Field() 
     lv03_northing = scrapy.Field()
     address_fuzzy = scrapy.Field()
+    buy = scrapy.Field()
 
 
     def __str__(self):

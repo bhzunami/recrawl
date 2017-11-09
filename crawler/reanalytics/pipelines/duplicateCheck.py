@@ -22,8 +22,10 @@ class DuplicateCheckPipeline(object):
         Initializes database connection and sessionmaker.
         Creates deals table.
         """
+        logger.info("Open spider Duplicate Pipeline")
         engine = create_engine(DATABASE_URL)
         self.Session = sessionmaker(bind=engine)
+        self.session = None
 
     def process_item(self, item, spider):
         """after item is processed
@@ -33,6 +35,7 @@ class DuplicateCheckPipeline(object):
         # wohnfläche
         # preis
         # ort
+        logging.debug("**** Check duplicate {}".format(self.session))
         municipality_id = item.get('municipality_id')
         objectType_id = item.get('obtype_id')
         num_rooms = utils.get_int(item.get('num_rooms'))
@@ -55,6 +58,8 @@ class DuplicateCheckPipeline(object):
 
         return item
 
-    def close_spider(self, spider):
-        self.session.close()
+    # def close_spider(self, spider):
+    #     logging.debug("Close duplicate checker {}".format(dir(self)))
+    #     if self.session:
+    #         self.session.close()
 

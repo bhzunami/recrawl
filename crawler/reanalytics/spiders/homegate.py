@@ -87,6 +87,7 @@ class Homegate(scrapy.Spider):
         ad['object_id'] = response.url.split("/")[-1]
         ad['crawler'] = 'homegate'
         ad['url'] = response.url
+        ad['buy'] = True if 'kaufen' in ad['url'] else False
 
         # Owner
         owner = '//div[contains(@class, "detail-owner")]/div[@class="infos"]/div[@class="description"]/p'

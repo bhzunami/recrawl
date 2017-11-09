@@ -17,8 +17,10 @@ class ObjectTypeFinderPipeline(object):
         Initializes database connection and sessionmaker.
         Creates deals table.
         """
+        logger.info("Object finder")
         engine = create_engine(DATABASE_URL)
         self.Session = sessionmaker(bind=engine, expire_on_commit=True)
+        self.session = None
 
     def process_item(self, item, spider):
         self.session = self.Session()
@@ -41,5 +43,5 @@ class ObjectTypeFinderPipeline(object):
         item['obtype_id'] = obtype.id
         return item
 
-    def close_spider(self, spider):
-        self.session.close()
+    # def close_spider(self, spider):
+    #     self.session.close()
