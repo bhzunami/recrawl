@@ -51,31 +51,21 @@ TELNETCONSOLE_ENABLED = False
 #   'Accept-Language': 'en',
 #}
 
-# Enable or disable spider middlewares
-# See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
-#    'reanalytics.middlewares.ReanalyticsSpiderMiddleware': 543,
-#}
-
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-DOWNLOADER_MIDDLEWARES = {
-    'reanalytics.middlewares.crawledURLCheck.CrawledURLCheck': 100,
-    'scrapoxy.downloadmiddlewares.proxy.ProxyMiddleware': 101,
-    'scrapoxy.downloadmiddlewares.wait.WaitMiddleware': 102,
-    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
-}
+#DOWNLOADER_MIDDLEWARES = {
+#    'reanalytics.middlewares.crawledURLCheck.CrawledURLCheck': 100,
+#    'scrapoxy.downloadmiddlewares.proxy.ProxyMiddleware': 101,
+#    'scrapoxy.downloadmiddlewares.wait.WaitMiddleware': 102,
+#    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
+#}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
-#EXTENSIONS = {
+EXTENSIONS = {
+    'reanalytics.extensions.simpleStatsextension.SimpleStats': 100,
 #    'scrapy.extensions.telnet.TelnetConsole': None,
-#}
-
-#EXTENSIONS = {
-#    'reanalytics.extensions.simpleStatsextension.SimpleStats': 100,
-#    'scrapy.extensions.telnet.TelnetConsole': None,
-#}
+}
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html

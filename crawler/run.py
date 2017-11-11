@@ -26,11 +26,11 @@ class Crawlers(Thread):
 
     def run(self):
         for spider in self.spiders:
-            crawler = self.process.create_crawler(spider)
-            logging.info("Set Name: {}".format(spider.name))
-            crawler.stats.set_value('spider', spider.name)
-            #self.process.crawlers.add(crawler)
-            self.process.crawl(crawler)
+            #crawler = self.process.create_crawler(spider)
+            #logging.info("Set Name: {}".format(spider.name))
+            #crawler.stats.set_value('spider', spider.name)
+            ##self.process.crawlers.add(crawler)
+            self.process.crawl(spider)
 
         self.process.start()
         # logging.debug("Finish with crawler thread")
@@ -58,7 +58,7 @@ def main():
     while crawl_thread.is_alive():
         # logger.info("Round {}".format(rounds))
         print("Round {}".format(rounds))
-        if rounds == 15:
+        if rounds == 10:
             break
         time.sleep(5)
         rounds += 1
@@ -74,6 +74,14 @@ def main():
     
     # logger.info("Set instances to 0")
     commander.update_scaling(min_sc, 0, max_sc)
+
+
+    print("Everything closed now its time to show some stats:")
+    import pdb
+    pdb.set_trace()
+    for crawler in process.crawlers:
+        print("Stats for crawler")
+        print("{}".format(crawler.stats.get_stats()))
 
 if __name__ == "__main__":
     main()
