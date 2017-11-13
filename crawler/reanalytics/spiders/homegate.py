@@ -28,31 +28,58 @@ class Homegate(scrapy.Spider):
         """Start method
         """
         urls = ['https://www.homegate.ch/kaufen/immobilien/kanton-aargau/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-appenzellinnerrhoden/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-appenzellausserrhoden/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-baselland/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-baselstadt/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-bern/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-fribourg/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-genf/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-glarus/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-graubuenden/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-jura/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-luzern/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-neuchatel/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-nidwalden/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-obwalden/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-st-gallen/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-schaffhausen/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-schwyz/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-solothurn/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-thurgau/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-tessin/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-uri/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-vaud/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-wallis/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-zug/trefferliste?tab=list',
-                # 'https://www.homegate.ch/kaufen/immobilien/kanton-zurich/trefferliste?tab=list'
+                'https://www.homegate.ch/kaufen/immobilien/kanton-appenzellinnerrhoden/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-appenzellausserrhoden/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-baselland/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-baselstadt/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-bern/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-fribourg/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-genf/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-glarus/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-graubuenden/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-jura/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-luzern/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-neuchatel/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-nidwalden/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-obwalden/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-st-gallen/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-schaffhausen/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-schwyz/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-solothurn/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-thurgau/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-tessin/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-uri/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-vaud/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-wallis/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-zug/trefferliste?tab=list',
+                'https://www.homegate.ch/kaufen/immobilien/kanton-zurich/trefferliste?tab=list',
+                # Rents
+                'https://www.homegate.ch/mieten/immobilien/kanton-aargau/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-appenzellinnerrhoden/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-appenzellausserrhoden/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-baselland/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-baselstadt/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-bern/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-fribourg/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-genf/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-glarus/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-graubuenden/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-jura/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-luzern/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-neuchatel/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-nidwalden/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-obwalden/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-st-gallen/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-schaffhausen/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-schwyz/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-solothurn/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-thurgau/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-tessin/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-uri/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-vaud/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-wallis/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-zug/trefferliste?tab=list',
+                'https://www.homegate.ch/mieten/immobilien/kanton-zurich/trefferliste?tab=list'
                 ]
 
         # Go through all urls
@@ -86,7 +113,7 @@ class Homegate(scrapy.Spider):
         # object id
         ad['object_id'] = response.url.split("/")[-1]
         ad['crawler'] = 'homegate'
-        ad['url'] = response.url
+        ad['url'] = self.get_clean_url(response.url)
         ad['buy'] = True if 'kaufen' in ad['url'] else False
 
         # Owner

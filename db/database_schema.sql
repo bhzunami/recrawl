@@ -118,6 +118,22 @@ CREATE TABLE object_types (
     category character varying(50)
 );
 
+
+CREATE TABLE crawler_stats (
+    id SERIAL NOT NULL PRIMARY KEY,
+    crawler character varying(20) NOT NULL,
+    started timestamp NOT NULL,
+    ended timestamp NOT NULL,
+    errors integer,
+    exceptions integer,
+    warnings integer,
+    infos integer,
+    requests integer,
+    responses integer,
+    ignored integer,
+    items integer,
+    finish_reason character varying(20) NOT NULL
+);
 --
 -- Create Index on important cols
 --
@@ -126,6 +142,7 @@ CREATE UNIQUE INDEX url_index ON advertisements (url);
 CREATE INDEX buy_index ON advertisements (buy);
 CREATE INDEX zip_index ON municipalities (zip);
 CREATE UNIQUE INDEX object_index ON object_types (name);
+CREATE INDEX crawler_stats_index on crawler_stats (crawler);
 
 --
 -- Set next autoincrement index because copy does not set the index

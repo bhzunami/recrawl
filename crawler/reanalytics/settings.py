@@ -12,8 +12,8 @@ NEWSPIDER_MODULE = 'reanalytics.spiders'
 
 # OWN SETTINGS:
 DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://localhost:5432/immo')
-LOG_ENABLED = True
-LOG_LEVEL = 'INFO'
+LOG_ENABLED = False
+# LOG_LEVEL = 'INFO'
 
 PROXY = os.environ.get('PROXY', 'http://127.0.0.1:8888/?noconnect') 
 API_SCRAPOXY = os.environ.get('API_SCRAPOXY', 'http://127.0.0.1:8889/api')
@@ -53,17 +53,17 @@ TELNETCONSOLE_ENABLED = False
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'reanalytics.middlewares.crawledURLCheck.CrawledURLCheck': 100,
-#    'scrapoxy.downloadmiddlewares.proxy.ProxyMiddleware': 101,
-#    'scrapoxy.downloadmiddlewares.wait.WaitMiddleware': 102,
-#    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    'reanalytics.middlewares.crawledURLCheck.CrawledURLCheck': 100,
+   'scrapoxy.downloadmiddlewares.proxy.ProxyMiddleware': 101,
+   'scrapoxy.downloadmiddlewares.wait.WaitMiddleware': 102,
+   'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
+}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
 EXTENSIONS = {
-    'reanalytics.extensions.simpleStatsextension.SimpleStats': 100,
+    'reanalytics.extensions.crawlerStats.CrawlerStats': 100,
 #    'scrapy.extensions.telnet.TelnetConsole': None,
 }
 

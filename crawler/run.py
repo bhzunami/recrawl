@@ -1,22 +1,26 @@
-
+# -*- coding: utf-8 -*-
 """
 https://github.com/fabienvauchelles/scrapoxy-python-api/blob/master/scrapoxy/downloadmiddlewares/scale.py
 
 https://github.com/fabienvauchelles/scrapoxy-python-api/blob/master/scrapoxy/commander.py
 """
 import time
+import os
+import datetime
 import logging
+import csv
 import scrapy
 from scrapy.crawler import CrawlerProcess
+from scrapy.utils.log import configure_logging
 from reanalytics.spiders.homegate import Homegate
 from reanalytics.spiders.newhome import Newhome
 from scrapy.utils.project import get_project_settings
 from scrapoxy.commander import Commander
 from threading import Thread
+from models import Advertisement
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
 import pdb
-
-# logging.basicConfig(level=logging.ERROR)
-# logger = logging.getLogger(__name__)
 
 class Crawlers(Thread):
     def __init__(self, process, spiders):
@@ -26,63 +30,92 @@ class Crawlers(Thread):
 
     def run(self):
         for spider in self.spiders:
-            #crawler = self.process.create_crawler(spider)
-            #logging.info("Set Name: {}".format(spider.name))
-            #crawler.stats.set_value('spider', spider.name)
-            ##self.process.crawlers.add(crawler)
             self.process.crawl(spider)
 
         self.process.start()
-        # logging.debug("Finish with crawler thread")
+        logging.debug("Finish with crawler thread")
+
+class App(object):
+    def __init__(self):
+        self.settings = get_project_settings()
+        self.commander = Commander(self.settings.get('API_SCRAPOXY'),
+                                   self.settings.get('API_SCRAPOXY_PASSWORD'))
+
+    
+    def prepare_instances(self):
+        if len(self.settings.get('DOWNLOADER_MIDDLEWARES', {})) <= 1:
+            logging.info("Do not run crawler over proxy")
+            return
+        min_sc, required_sc, max_sc = self.commander.get_scaling()
+        required_sc = max_sc
+        self.commander.update_scaling(min_sc, required_sc, max_sc)
+        wait_for_scale = self.settings.get('WAIT_FOR_SCALE')
+        time.sleep(wait_for_scale)
 
 
-def start_instances():
-    pass
+    def runCrawlers(self):
+        process = CrawlerProcess(self.settings)
+        crawl_thread = Crawlers(process=process, spiders=[Homegate, Newhome])
+        crawl_thread.start()
+        rounds = 0
+        while crawl_thread.is_alive():
+            if rounds == (5*12):
+                logger.info("Run into time out")
+                break
+            time.sleep(5)
+            rounds += 1
 
+        logging.debug("Stopping all crawlers..")
+        process.stop()
+        #process.join()
+        while crawl_thread.is_alive():
+            logging.debug("Wait for crawlers to clean up...")
+            time.sleep(5)
+
+    def shutdown_instances(self):
+        if len(self.settings.get('DOWNLOADER_MIDDLEWARES', {})) <= 1:
+            logging.info("Nothing to stop, because no instances were started")
+            return
+        min_sc, required_sc, max_sc = self.commander.get_scaling()
+        self.commander.update_scaling(min_sc, 0, max_sc)
+
+    def getCrawledData(self):
+        engine = create_engine(self.settings.get('DATABASE_URL'))
+        Session = sessionmaker(bind=engine, expire_on_commit=True)
+        session = Session()
+        from_time = datetime.datetime.now() - datetime.timedelta(days=1)
+        ads = session.query(Advertisement).filter(Advertisement.last_seen >= from_time).all()
+        with open("crawled_ads.csv", "w", newline="") as csvfile:
+            csvwriter = csv.writer(csvfile, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            csvwriter.writerow([column.key for column in Advertisement.__table__.columns])
+            for ad in ads:
+                csvwriter.writerow(list(ad))
+        print(len(ads))
 
 def main():
-    settings = get_project_settings()
-    commander = Commander(settings.get('API_SCRAPOXY'),
-                          settings.get('API_SCRAPOXY_PASSWORD'))
-    min_sc, required_sc, max_sc = commander.get_scaling()
-    required_sc = max_sc
-    commander.update_scaling(min_sc, required_sc, max_sc)
-    wait_for_scale = settings.get('WAIT_FOR_SCALE')
-    # logger.info("Started up instances. wait {} seconds to start crawling".format(wait_for_scale))
-    time.sleep(wait_for_scale)
-
-    process = CrawlerProcess(settings)
-    crawl_thread = Crawlers(process=process, spiders=[Homegate, Newhome])
-    crawl_thread.start()
-    rounds = 0
-    while crawl_thread.is_alive():
-        # logger.info("Round {}".format(rounds))
-        print("Round {}".format(rounds))
-        if rounds == 10:
-            break
-        time.sleep(5)
-        rounds += 1
-
-    # logger.debug("Stopping all crawlers..")
-    process.stop()
-    #process.join()
-    # logger.info("Send stop signal to all crawlers..")
-    while crawl_thread.is_alive():
-        # logger.debug("Wait for crawlers to clean up...")
-        print("Wait for crawlers to clean up...")
-        time.sleep(5)
-    
-    # logger.info("Set instances to 0")
-    commander.update_scaling(min_sc, 0, max_sc)
-
-
-    print("Everything closed now its time to show some stats:")
-    import pdb
-    pdb.set_trace()
-    for crawler in process.crawlers:
-        print("Stats for crawler")
-        print("{}".format(crawler.stats.get_stats()))
+    app = App()
+    app.prepare_instances()
+    app.runCrawlers()
+    app.shutdown_instances()
 
 if __name__ == "__main__":
+    # Prepare log system, do not use scrpay as root logger 
+    configure_logging(install_root_handler=False)
+    current_time = datetime.datetime.now()
+    if not os.path.isdir('logs'):
+        os.mkdir('logs')
+    
+    logging.basicConfig(
+        filename='logs/log_crawler-{}-{}-{}_{}:{}:{}.log'.format(
+            current_time.day,
+            current_time.month,
+            current_time.year,
+            current_time.hour,
+            current_time.minute,
+            current_time.second
+        ),
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        level=logging.DEBUG
+    )
     main()
 

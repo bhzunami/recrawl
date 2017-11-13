@@ -42,6 +42,4 @@ class DatabaseWriterPipeline(object):
 
         return item
 
-    def close_spider(self, spider):
-        self.session.close()
 
