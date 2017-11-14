@@ -15,7 +15,7 @@ DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://localhost:5432/immo'
 LOG_ENABLED = False
 # LOG_LEVEL = 'INFO'
 
-PROXY = os.environ.get('PROXY', 'http://127.0.0.1:8888/?noconnect') 
+PROXY = os.environ.get('PROXY_URL', 'http://127.0.0.1:8888/?noconnect') 
 API_SCRAPOXY = os.environ.get('API_SCRAPOXY', 'http://127.0.0.1:8889/api')
 API_SCRAPOXY_PASSWORD = os.environ.get('API_SCRAPOXY_PASSWORD', 'CHANGE_THIS_PASSWORD')
 WAIT_FOR_SCALE = os.environ.get('WAIT_FOR_SCALE', 5)
