@@ -61,15 +61,14 @@ class App(object):
         crawl_thread.start()
         rounds = 0
         while crawl_thread.is_alive():
-            if rounds == (5*12):
+            if rounds == (1440):  # 1440*10(sleep) = 4h
                 logging.info("Run into time out")
                 break
-            time.sleep(5)
             rounds += 1
+            time.sleep(10)
 
         logging.debug("Stopping all crawlers..")
         process.stop()
-        #process.join()
         while crawl_thread.is_alive():
             logging.debug("Wait for crawlers to clean up...")
             time.sleep(5)
