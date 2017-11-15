@@ -55,9 +55,9 @@ TELNETCONSOLE_ENABLED = False
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     'reanalytics.middlewares.crawledURLCheck.CrawledURLCheck': 100,
-   'scrapoxy.downloadmiddlewares.proxy.ProxyMiddleware': 101,
-   'scrapoxy.downloadmiddlewares.wait.WaitMiddleware': 102,
-   'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
+    'scrapoxy.downloadmiddlewares.proxy.ProxyMiddleware': 101,
+    'scrapoxy.downloadmiddlewares.wait.WaitMiddleware': 102,
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
 }
 
 # Enable or disable extensions

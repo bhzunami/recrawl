@@ -14,6 +14,8 @@ from scrapy.crawler import CrawlerProcess
 from scrapy.utils.log import configure_logging
 from reanalytics.spiders.homegate import Homegate
 from reanalytics.spiders.newhome import Newhome
+from reanalytics.spiders.immoscout24 import Immoscout24
+
 from scrapy.utils.project import get_project_settings
 from scrapoxy.commander import Commander
 from threading import Thread
@@ -55,7 +57,7 @@ class App(object):
 
     def runCrawlers(self):
         process = CrawlerProcess(self.settings)
-        crawl_thread = Crawlers(process=process, spiders=[Homegate, Newhome])
+        crawl_thread = Crawlers(process=process, spiders=[Homegate, Newhome, Immoscout24])
         crawl_thread.start()
         rounds = 0
         while crawl_thread.is_alive():
