@@ -11,7 +11,7 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_ADMIN" postgres <<-EOSQL
 EOSQL
 
 echo "Import schema"
-psql --username "$POSTGRES_USER" "$DATABASE_NAME" < database_schema.sql
+psql --username "$POSTGRES_USER" "$DATABASE_NAME" < database_schema.schema
 
 echo "Import Municipalities"
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" "$DATABASE_NAME" <<-EOSQL

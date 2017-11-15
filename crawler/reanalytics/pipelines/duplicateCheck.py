@@ -56,6 +56,7 @@ class DuplicateCheckPipeline(object):
             logger.info("Found possible duplicate: url in database: {}, duplicate url: {}".format(ad[0].url, item.get('url', '')))
             raise DropItem
 
+        self.session.close()
         return item
 
     # def close_spider(self, spider):

@@ -18,8 +18,8 @@ LOG_ENABLED = False
 PROXY = os.environ.get('PROXY_URL', 'http://127.0.0.1:8888/?noconnect') 
 API_SCRAPOXY = os.environ.get('API_SCRAPOXY', 'http://127.0.0.1:8889/api')
 API_SCRAPOXY_PASSWORD = os.environ.get('API_SCRAPOXY_PASSWORD', 'CHANGE_THIS_PASSWORD')
-WAIT_FOR_SCALE = os.environ.get('WAIT_FOR_SCALE', 5)
-WAIT_FOR_START = os.environ.get('WAIT_FOR_START', 5)
+WAIT_FOR_SCALE = int(os.environ.get('WAIT_FOR_SCALE', 5))
+WAIT_FOR_START = int(os.environ.get('WAIT_FOR_START', 5))
 ADMIN_BASE_URL = 'https://api3.geo.admin.ch/rest/services/api/SearchServer'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent

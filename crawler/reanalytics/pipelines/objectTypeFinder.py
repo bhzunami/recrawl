@@ -41,6 +41,7 @@ class ObjectTypeFinderPipeline(object):
 
         # Set the correct id
         item['obtype_id'] = obtype.id
+        self.session.close()
         return item
 
     # def close_spider(self, spider):

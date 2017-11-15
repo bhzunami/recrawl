@@ -39,7 +39,7 @@ class DatabaseWriterPipeline(object):
         except Exception as exception:
             logger.error("Could not save advertisement %s cause %s", ad.object_id, exception)
             self.session.rollback()
-
+        self.session.close()
         return item
 
 

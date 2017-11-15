@@ -60,7 +60,7 @@ class App(object):
         rounds = 0
         while crawl_thread.is_alive():
             if rounds == (5*12):
-                logger.info("Run into time out")
+                logging.info("Run into time out")
                 break
             time.sleep(5)
             rounds += 1
@@ -93,6 +93,8 @@ class App(object):
         print(len(ads))
 
 def main():
+    # Wait 5 seconds until all containers are started
+    time.sleep(5)
     app = App()
     app.prepare_instances()
     app.runCrawlers()
@@ -117,5 +119,6 @@ if __name__ == "__main__":
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         level=logging.DEBUG
     )
+    logging.getLogger().addHandler(logging.StreamHandler())
     main()
 

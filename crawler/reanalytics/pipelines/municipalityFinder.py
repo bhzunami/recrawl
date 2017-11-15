@@ -64,4 +64,5 @@ class MunicipalityFinderPipeline(object):
             item['municipality_id'] = None
             logging.warning("Could not find zip_code {} {} in database".format(zip_code, name))
 
+        session.close()
         return item

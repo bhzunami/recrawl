@@ -82,10 +82,8 @@ class Newhome(scrapy.Spider):
 
         # Go through all urls
         for url in urls:
-            # yield scrapy.Request(url=url, callback=self.parse)
-            yield scrapy.Request(url=url, callback=self.parse_ad)
+            yield scrapy.Request(url=url, callback=self.parse)
             
-
     def parse(self, response):
         """Parse the page
         """
