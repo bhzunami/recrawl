@@ -5,25 +5,27 @@ services:
       context: .
       dockerfile: Dockerfile-crawler
     links:
-    - scrapoxy
-    - database
+      - scrapoxy
+      - database
     env_file:
-    - crawler/scrapy.env
-    - crawler/scrapy.secrets.env
+      - crawler/scrapy.env
+      - crawler/scrapy.secrets.env
     hostname: scrapy
     volumes:
       - ./data/logs:/usr/src/app/logs
+    network_mode: bridge
 
   scrapoxy:
     image: fabienvauchelles/scrapoxy
     env_file:
-    - crawler/scrapoxy.env
-    - crawler/scrapoxy.secrets.env
+      - crawler/scrapoxy.env
+      - crawler/scrapoxy.secrets.env
     ports:
-    - "49301:8889"
+      - "49301:8889"
     expose:
-    - 8888
-    - 8889
+      - 8888
+      - 8889
+    network_mode: bridge
 
   database:
     build:
@@ -32,5 +34,6 @@ services:
     volumes:
       - ./data/database:/var/lib/postgresql/data/pgdata
     env_file:
-    - db/database.env
-    - db/database.secrets.env
+      - db/database.env
+      - db/database.secrets.env
+    network_mode: bridge

@@ -22,7 +22,6 @@ class CrawledURLCheck(object):
         """
         if type(spider).__name__ == "DefaultSpider":
             return
-
         clean_url = spider.get_clean_url(request.url)
         logging.debug("Check if %s is already in database?", clean_url)
         session = self.Session()
@@ -36,4 +35,4 @@ class CrawledURLCheck(object):
 
         session.close()
         logging.debug("URL %s was not found in database.", clean_url)
-        return
+        return None

@@ -61,7 +61,7 @@ class App(object):
         crawl_thread.start()
         rounds = 0
         while crawl_thread.is_alive():
-            if rounds == (1440):  # 1440*10(sleep) = 4h
+            if rounds == (2880):  # 2880*10(sleep) = 8h
                 logging.info("Run into time out")
                 break
             rounds += 1
@@ -109,16 +109,13 @@ if __name__ == "__main__":
         os.mkdir('logs')
     
     logging.basicConfig(
-        filename='logs/log_crawler-{}-{}-{}_{}:{}:{}.log'.format(
+        filename='logs/log_crawler-{}-{}-{}.log'.format(
             current_time.day,
             current_time.month,
-            current_time.year,
-            current_time.hour,
-            current_time.minute,
-            current_time.second
+            current_time.year
         ),
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        level=logging.DEBUG
+        level=logging.INFO
     )
     logging.getLogger().addHandler(logging.StreamHandler())
     main()

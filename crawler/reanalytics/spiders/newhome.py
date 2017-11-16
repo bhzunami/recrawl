@@ -20,8 +20,9 @@ class Newhome(scrapy.Spider):
     @staticmethod
     def get_clean_url(url):
         """Returns clean ad url for storing in database
+        Do not modify url for newhome
         """
-        return url.split('?')[0]
+        return url
 
     def start_requests(self):
         """Start method
