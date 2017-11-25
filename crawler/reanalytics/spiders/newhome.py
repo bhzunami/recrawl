@@ -79,7 +79,7 @@ class Newhome(scrapy.Spider):
                 'https://www.newhome.ch/de/mieten/suchen/haus_wohnung/kanton_vaud/liste.aspx?pc=new',
                 'https://www.newhome.ch/de/mieten/suchen/haus_wohnung/kanton_wallis/liste.aspx?pc=new',
                 'https://www.newhome.ch/de/mieten/suchen/haus_wohnung/kanton_zug/liste.aspx?pc=new',
-                'https://www.newhome.ch/de/mieten/suchen/haus_wohnung/kanton_zurich/liste.aspx?pc=new']
+                'https://www.newhome.ch/de/mieten/suchen/haus_wohnung/kanton_zuerich/liste.aspx?pc=new']
 
         # Go through all urls
         for url in urls:
