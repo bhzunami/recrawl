@@ -13,7 +13,7 @@ NEWSPIDER_MODULE = 'reanalytics.spiders'
 # OWN SETTINGS:
 DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://localhost:5432/immo')
 #LOG_ENABLED = False
-LOG_LEVEL = 'DEBUG'
+LOG_LEVEL = 'INFO'
 
 PROXY = os.environ.get('PROXY_URL', 'http://127.0.0.1:8888/?noconnect') 
 API_SCRAPOXY = os.environ.get('API_SCRAPOXY', 'http://127.0.0.1:8889/api')
@@ -56,10 +56,10 @@ TELNETCONSOLE_ENABLED = False
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-#    'reanalytics.middlewares.crawledURLCheck.CrawledURLCheck': 100,
-#    'scrapoxy.downloadmiddlewares.proxy.ProxyMiddleware': 101,
-#    'scrapoxy.downloadmiddlewares.wait.WaitMiddleware': 102,
-#    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
+    'reanalytics.middlewares.crawledURLCheck.CrawledURLCheck': 100,
+    'scrapoxy.downloadmiddlewares.proxy.ProxyMiddleware': 101,
+    'scrapoxy.downloadmiddlewares.wait.WaitMiddleware': 102,
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
 }
 
 # Enable or disable extensions
@@ -72,12 +72,12 @@ EXTENSIONS = {
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-#    'reanalytics.pipelines.municipalityFinder.MunicipalityFinderPipeline': 110,
-#    'reanalytics.pipelines.objectTypeFinder.ObjectTypeFinderPipeline': 120,
-#    'reanalytics.pipelines.duplicateCheck.DuplicateCheckPipeline': 130,
-#    'reanalytics.pipelines.coordinates.CoordinatesPipeline': 140,
-#    'reanalytics.pipelines.databaseWriter.DatabaseWriterPipeline': 200,
-     'reanalytics.pipelines.jsonWriter.JSONWriterPipeline': 300,
+    'reanalytics.pipelines.municipalityFinder.MunicipalityFinderPipeline': 110,
+    'reanalytics.pipelines.objectTypeFinder.ObjectTypeFinderPipeline': 120,
+    'reanalytics.pipelines.duplicateCheck.DuplicateCheckPipeline': 130,
+    'reanalytics.pipelines.coordinates.CoordinatesPipeline': 140,
+    'reanalytics.pipelines.databaseWriter.DatabaseWriterPipeline': 200,
+#     'reanalytics.pipelines.jsonWriter.JSONWriterPipeline': 300,
 }
 
 
