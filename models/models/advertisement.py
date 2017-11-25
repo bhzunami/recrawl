@@ -107,6 +107,8 @@ class Advertisement(Base):
         self.assign(data, 'effective_area', func=get_float)
         self.assign(data, 'plot_area', func=get_float)
 
+        self.assign(data, 'available', func=get_date)
+
         # Set jsons
         self.characteristics = json.dumps(data.get('characteristics', None)) or self.characteristics
         self.additional_data = json.dumps(data.get('additional_data', None)) or self.additional_data

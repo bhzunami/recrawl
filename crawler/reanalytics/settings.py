@@ -12,8 +12,8 @@ NEWSPIDER_MODULE = 'reanalytics.spiders'
 
 # OWN SETTINGS:
 DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://localhost:5432/immo')
-LOG_ENABLED = False
-# LOG_LEVEL = 'INFO'
+#LOG_ENABLED = False
+LOG_LEVEL = 'DEBUG'
 
 PROXY = os.environ.get('PROXY_URL', 'http://127.0.0.1:8888/?noconnect') 
 API_SCRAPOXY = os.environ.get('API_SCRAPOXY', 'http://127.0.0.1:8889/api')
@@ -56,10 +56,10 @@ TELNETCONSOLE_ENABLED = False
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-    'reanalytics.middlewares.crawledURLCheck.CrawledURLCheck': 100,
-    'scrapoxy.downloadmiddlewares.proxy.ProxyMiddleware': 101,
-    'scrapoxy.downloadmiddlewares.wait.WaitMiddleware': 102,
-    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
+#    'reanalytics.middlewares.crawledURLCheck.CrawledURLCheck': 100,
+#    'scrapoxy.downloadmiddlewares.proxy.ProxyMiddleware': 101,
+#    'scrapoxy.downloadmiddlewares.wait.WaitMiddleware': 102,
+#    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
 }
 
 # Enable or disable extensions
@@ -72,12 +72,12 @@ EXTENSIONS = {
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'reanalytics.pipelines.municipalityFinder.MunicipalityFinderPipeline': 110,
-    'reanalytics.pipelines.objectTypeFinder.ObjectTypeFinderPipeline': 120,
-    'reanalytics.pipelines.duplicateCheck.DuplicateCheckPipeline': 130,
-    'reanalytics.pipelines.coordinates.CoordinatesPipeline': 140,
-    'reanalytics.pipelines.databaseWriter.DatabaseWriterPipeline': 200,
-    # 'reanalytics.pipelines.jsonWriter.JSONWriterPipeline': 300,
+#    'reanalytics.pipelines.municipalityFinder.MunicipalityFinderPipeline': 110,
+#    'reanalytics.pipelines.objectTypeFinder.ObjectTypeFinderPipeline': 120,
+#    'reanalytics.pipelines.duplicateCheck.DuplicateCheckPipeline': 130,
+#    'reanalytics.pipelines.coordinates.CoordinatesPipeline': 140,
+#    'reanalytics.pipelines.databaseWriter.DatabaseWriterPipeline': 200,
+     'reanalytics.pipelines.jsonWriter.JSONWriterPipeline': 300,
 }
 
 
@@ -113,24 +113,25 @@ KEY_FIGURES = {
     'Stockwerk': 'floor', # newhome, immoscout24
     'Anzahl Etagen': 'num_floors',  # homegate
     'Etagen im Haus': 'num_floors',  # newhome, urbanhome
-    'Anzahl Etagen des Objektes': 'num_floors', # immoscout24
+    'Anzahl Stockwerke': 'num_floors', # immoscout24
     'Verfügbar': 'available',  # homegate, urbanhome
     'Bezug': 'available',  # newhome
+    'Verfügbarkeit': 'available',  # immoscout24
     'Objekttyp': 'objecttype',  # homegate
     'Objektart': 'objecttype', # newhome
     'Zimmer': 'num_rooms',  # homegate, newhome, urbanhome
     'Anzahl Zimmer': 'num_rooms',
-    'Wohnfläche': 'living_area',  # homegate, newhome, urbanhome
+    'Wohnfläche': 'living_area',  # homegate, newhome, urbanhome, immoscout24
     'Baujahr': 'build_year',  # homegate, newhome, immoscout24
     'Nutzfläche': 'effective_area', # homegate, immoscout24
     'Kubatur': 'cubature',  # homegate, newhome, immoscout24
     'Raumhöhe': 'room_height',  # homegate
-    'Grundstückfläche': 'plot_area',  # homegate, newhome, immoscout24
+    'Grundstückfläche': 'plot_area',  # homegate, newhome
+    'Grundstücksfläche': 'plot_area',  # immoscout24
     'Grundstück': 'plot_area',  # urbanhome
     'Zustand': 'condition',  # newhome
-    'Letzte Renovation': 'last_renovation_year',  # homegate
+    'Letzte Renovation': 'last_renovation_year',  # homegate, immoscout24
     'Renoviert im Jahr': 'last_renovation_year',  # newhome
-    'Letztes Renovationsjahr': 'last_renovation_year', # immoscout24
     'Immocode' : 'object_id',  # newhome
     'ImmoScout24-Code': 'object_id', # immoscout24
     'Inserate-Nr': 'object_id', # urbanhome

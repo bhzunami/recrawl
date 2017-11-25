@@ -19,7 +19,7 @@ def prepare_string(s):
         return None
     return s.replace("'", "").replace(",", ".")
 
-ignore_values = ['Preis auf Anfrage', 'auf Anfrage', 'Erdgeschoss', 'EG', 'Parterre']
+ignore_values = ['Preis auf Anfrage', 'auf Anfrage', 'Auf Anfrage', 'Erdgeschoss', 'EG', 'Parterre']
 
 def extract_number(num):
     try:
@@ -31,8 +31,6 @@ def extract_number(num):
             return -1
         if num in ignore_values:
             return 0
-
-    print("ERROR REGEX INPUT: {}".format(num))
     return None
 
 def get_int(num):

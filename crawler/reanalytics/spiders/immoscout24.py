@@ -99,45 +99,63 @@ class Immoscout24(scrapy.Spider):
         ad['objecttype'] = response.url.split("/")[5].split("-")[0]
         ad['additional_data'] = {}
 
-        # price, number of rooms, living area
-        for div in response.xpath('//div[contains(@class, "layout--columns")]/div[@class="column" and ./div[@class="data-label"]]'):
-            key, value, *_ = [x.strip() for x in div.xpath('div//text()').extract()]
-            try:
-                key = self.settings['KEY_FIGURES'][key]
-                ad[key] = value
-            except KeyError:
-                self.logger.warning("Key not found: {}".format(key))
-                ad['additional_data'][key] = value
+        # immoscout does have gibberish div names -> we are interessted in the h2 
+        for selector in response.xpath('//h2'):
+            article = selector.xpath('..')
+            title = selector.xpath('text()').extract_first()
+            if not title:
+                continue
+            title = title.lower()
+            
+            if 'zimmer' in title:
+                ad['num_rooms'] = float(title.split()[0])
 
-        # location
-        loc = response.xpath('//table//div[contains(@class, "adr")]')
-        ad['street'] = loc.xpath('div[contains(@class, "street-address")]/text()').extract_first()
-        ad['place'] = "{} {}".format(loc.xpath('span[contains(@class, "postal-code")]/text()').extract_first().strip(),
-                                     loc.xpath('span[contains(@class, "locality")]/text()').extract_first())
-
-        # description
-        ad['description'] = ' '.join(response.xpath(
-            '//div[contains(@class, "description")]//text()').extract()).strip()
-
-        # more attributes
-        ad['characteristics'] = {}
-
-        for elm in response.xpath('//div[contains(@class, "description")]/following-sibling::h2[@class="title-secondary"]'):
-            for entry in elm.xpath('./following-sibling::table[1]//tr'):
-                key, value = entry.xpath('td')
-                key = key.xpath('text()').extract_first()
-                if len(value.xpath('span[contains(@class, "tick")]')) == 1:
-                    # checkmark
-                    value = True
-                else:
-                    # text
-                    value = value.xpath('text()').extract_first()
-
-                # write to additional data, or to structured field
-                try:
-                    key = self.settings['KEY_FIGURES'][key]
-                    ad[key] = value
-                except KeyError:
-                    ad['characteristics'][key] = value
-
+            if 'standort' in title:
+                address =  article.xpath('p/text()').extract()
+                # Missing street
+                if len(address) == 4:
+                    ad['street'] = None
+                    ad['place'] = "{} {}".format(address[0], address[2])
+                elif len(address) == 5:
+                    ad['street'] = address[0]
+                    ad['place'] = "{} {}".format(address[1], address[3])
+            ad['characteristics'] = {}
+            if 'hauptangaben' in title or 'preis' in title or 'grössenangaben' in title:
+                for element in article.xpath('table/tbody/tr'):
+                    try:
+                        key, value = element.xpath('td/text()')
+                    except ValueError as e:
+                        self.logger.debug("Could not extract key value for {}".format(element.xpath('td/text()')))
+                        continue
+                    key = key.extract()
+                    try:
+                        key = self.settings['KEY_FIGURES'][key]
+                        ad[key] = value.extract()
+                    except KeyError:
+                        ad['characteristics'][key] = value.extract()
+            if 'beschreibung' in title:
+                ad['description'] = ' '.join(article.xpath('.//p//text()').extract())
+            if 'innenraum' in title or 'aussenraum' in title or 'technik' in title:
+                for element in article.xpath('table/tbody/tr'):
+                    try:
+                        key, value = element.xpath('td/text()').extract()
+                        ad['characteristics'][key] = value
+                    except ValueError:
+                        key = element.xpath('td[1]/text()').extract_first()
+                        ad['characteristics'][key] = True
+            if 'merkmale' in title:
+                for element in article.xpath('table/tbody/tr'):
+                    try:
+                        key, value = element.xpath('td/text()')
+                    except ValueError as e:
+                        self.logger.debug("Could not extract key value for {}".format(element.xpath('td/text()')))
+                        key = element.xpath('td[1]/text()').extract_first()
+                        ad['characteristics'][key] = True
+                        continue
+                    key = key.extract()
+                    try:
+                        key = self.settings['KEY_FIGURES'][key]
+                        ad[key] = value.extract()
+                    except KeyError:
+                        ad['characteristics'][key] = value.extract()
         yield ad
