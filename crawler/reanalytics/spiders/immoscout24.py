@@ -98,7 +98,7 @@ class Immoscout24(scrapy.Spider):
         ad['buy'] = True if 'kaufen' in ad['url'] else False
         ad['objecttype'] = response.url.split("/")[5].split("-")[0]
         ad['additional_data'] = {}
-
+        ad['characteristics'] = {}
         # immoscout does have gibberish div names -> we are interessted in the h2 
         for selector in response.xpath('//h2'):
             article = selector.xpath('..')
@@ -106,10 +106,8 @@ class Immoscout24(scrapy.Spider):
             if not title:
                 continue
             title = title.lower()
-            
             if 'zimmer' in title:
                 ad['num_rooms'] = float(title.split()[0])
-
             if 'standort' in title:
                 address =  article.xpath('p/text()').extract()
                 # Missing street
@@ -119,13 +117,12 @@ class Immoscout24(scrapy.Spider):
                 elif len(address) == 5:
                     ad['street'] = address[0]
                     ad['place'] = "{} {}".format(address[1], address[3])
-            ad['characteristics'] = {}
             if 'hauptangaben' in title or 'preis' in title or 'grössenangaben' in title:
                 for element in article.xpath('table/tbody/tr'):
                     try:
                         key, value = element.xpath('td/text()')
                     except ValueError as e:
-                        self.logger.debug("Could not extract key value for {}".format(element.xpath('td/text()')))
+                        self.logger.debug("Could not extract key value for {}".format(element.xpath('td/text()').extract()))
                         continue
                     key = key.extract()
                     try:
@@ -139,7 +136,7 @@ class Immoscout24(scrapy.Spider):
                 for element in article.xpath('table/tbody/tr'):
                     try:
                         key, value = element.xpath('td/text()').extract()
-                        ad['characteristics'][key] = value
+                        ad[key] = value
                     except ValueError:
                         key = element.xpath('td[1]/text()').extract_first()
                         ad['characteristics'][key] = True
@@ -148,7 +145,6 @@ class Immoscout24(scrapy.Spider):
                     try:
                         key, value = element.xpath('td/text()')
                     except ValueError as e:
-                        self.logger.debug("Could not extract key value for {}".format(element.xpath('td/text()')))
                         key = element.xpath('td[1]/text()').extract_first()
                         ad['characteristics'][key] = True
                         continue
