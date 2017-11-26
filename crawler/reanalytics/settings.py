@@ -13,7 +13,7 @@ NEWSPIDER_MODULE = 'reanalytics.spiders'
 # OWN SETTINGS:
 DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://localhost:5432/immo')
 #LOG_ENABLED = False
-LOG_LEVEL = 'INFO'
+LOG_LEVEL = 'WARN'
 
 PROXY = os.environ.get('PROXY_URL', 'http://127.0.0.1:8888/?noconnect') 
 API_SCRAPOXY = os.environ.get('API_SCRAPOXY', 'http://127.0.0.1:8889/api')

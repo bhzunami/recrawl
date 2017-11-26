@@ -136,7 +136,7 @@ class Immoscout24(scrapy.Spider):
                 for element in article.xpath('table/tbody/tr'):
                     try:
                         key, value = element.xpath('td/text()').extract()
-                        ad[key] = value
+                        ad['characteristics'][key] = value
                     except ValueError:
                         key = element.xpath('td[1]/text()').extract_first()
                         ad['characteristics'][key] = True

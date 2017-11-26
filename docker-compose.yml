@@ -13,6 +13,7 @@ services:
     hostname: scrapy
     volumes:
       - ./data/logs:/usr/src/app/logs
+      - ./data/share:/tmp/share
     network_mode: bridge
 
   scrapoxy:
@@ -33,6 +34,7 @@ services:
       dockerfile: Dockerfile-db
     volumes:
       - ./data/database:/var/lib/postgresql/data/pgdata
+      - ./data/share:/tmp/share
     env_file:
       - db/database.env
       - db/database.secrets.env
