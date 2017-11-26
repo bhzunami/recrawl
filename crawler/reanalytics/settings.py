@@ -109,6 +109,9 @@ KEY_FIGURES = {
     'Kaufpreis': 'price_brutto',  # immoscout24
     'Preis Garage': 'additional_costs',  # newhome
     'Preis Abstellplatz': 'additional_costs', # newhome
+    'Nettomiete / Monat': 'price_netto', # newhome
+    'Nebenkosten / Monat': 'additional_costs', # newhome
+    'Miete / Monat': 'price_brutto', # newhome
     'Etage': 'floor',     # homegate, urbanhome
     'Stockwerk': 'floor', # newhome, immoscout24
     'Anzahl Etagen': 'num_floors',  # homegate
