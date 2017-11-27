@@ -61,7 +61,7 @@ class App(object):
         crawl_thread.start()
         rounds = 0
         while crawl_thread.is_alive():
-            if rounds == (2880):  # 2880*10(sleep) = 8h
+            if rounds == (4320):  # 4320*10(sleep) = 12h
                 logging.info("Run into time out")
                 break
             rounds += 1
