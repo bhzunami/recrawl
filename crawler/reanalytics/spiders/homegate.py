@@ -10,6 +10,7 @@ https://www.homegate.ch/mieten/immobilien/kanton-{kanton}/trefferliste?tab=list
 Author: N. Mauchle <nmauchle@gmail.com>
 
 """
+import random
 import scrapy
 from ..models import Ad
 
@@ -83,6 +84,7 @@ class Homegate(scrapy.Spider):
                 ]
 
         # Go through all urls
+        random.shuffle(urls)
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
 

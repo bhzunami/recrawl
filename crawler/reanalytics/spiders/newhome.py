@@ -9,6 +9,7 @@ http://www.newhome.ch/de/mieten/suchen/wohnung/kanton_basellandschaft/liste.aspx
 Author: N. Mauchle <nmauchle@gmail.com>
 
 """
+import random
 import scrapy
 from ..models import Ad
 
@@ -82,6 +83,7 @@ class Newhome(scrapy.Spider):
                 'https://www.newhome.ch/de/mieten/suchen/haus_wohnung/kanton_zuerich/liste.aspx?pc=new']
 
         # Go through all urls
+        random.shuffle(urls)
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
             

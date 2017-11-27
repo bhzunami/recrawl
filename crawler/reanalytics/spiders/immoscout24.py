@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import random
 import scrapy
 from ..models import Ad
 
@@ -69,6 +70,7 @@ class Immoscout24(scrapy.Spider):
             'https://www.immoscout24.ch/de/immobilien/mieten/kanton-zug?ps=120',
             'https://www.immoscout24.ch/de/immobilien/mieten/kanton-zuerich?ps=120']
 
+        random.shuffle(urls)
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
