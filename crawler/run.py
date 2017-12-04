@@ -102,21 +102,21 @@ def main():
     app.shutdown_instances()
 
 if __name__ == "__main__":
-    # Prepare log system, do not use scrpay as root logger 
-    configure_logging(install_root_handler=False)
+    # Prepare log system, do not use scrpay as root logger
     current_time = datetime.datetime.now()
     if not os.path.isdir('logs'):
         os.mkdir('logs')
-    
+
+    configure_logging(install_root_handler=False)
     logging.basicConfig(
+        level=logging.INFO,
         filename='logs/log_crawler-{}-{}-{}.log'.format(
             current_time.day,
             current_time.month,
             current_time.year
         ),
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        level=logging.INFO
     )
     logging.getLogger().addHandler(logging.StreamHandler())
+    #logging.getLogger('scrapy').setLevel(logging.WARNING)
     main()
-
