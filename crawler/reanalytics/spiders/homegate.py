@@ -18,17 +18,7 @@ class Homegate(scrapy.Spider):
     """Homegate crawler
     """
     name = "homegate"
-
-    @staticmethod
-    def get_clean_url(url):
-        """Returns clean ad url for storing in database
-        """
-        return url.split('?')[0]
-
-    def start_requests(self):
-        """Start method
-        """
-        urls = ['https://www.homegate.ch/kaufen/immobilien/kanton-aargau/trefferliste?tab=list',
+    start_urls = ['https://www.homegate.ch/kaufen/immobilien/kanton-aargau/trefferliste?tab=list',
                 'https://www.homegate.ch/kaufen/immobilien/kanton-appenzellinnerrhoden/trefferliste?tab=list',
                 'https://www.homegate.ch/kaufen/immobilien/kanton-appenzellausserrhoden/trefferliste?tab=list',
                 'https://www.homegate.ch/kaufen/immobilien/kanton-baselland/trefferliste?tab=list',
@@ -83,9 +73,18 @@ class Homegate(scrapy.Spider):
                 'https://www.homegate.ch/mieten/immobilien/kanton-zurich/trefferliste?tab=list'
                 ]
 
+    @staticmethod
+    def get_clean_url(url):
+        """Returns clean ad url for storing in database
+        """
+        return url.split('?')[0]
+
+    def start_requests(self):
+        """Start method
+        """
         # Go through all urls
-        random.shuffle(urls)
-        for url in urls:
+        random.shuffle(self.start_urls)
+        for url in self.start_urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
 
@@ -104,7 +103,6 @@ class Homegate(scrapy.Spider):
                          '/ul/li[@class="next"]/a/@href'
         next_page_url = response.xpath(next_page_path).extract_first()
         if next_page_url:
-            self.logger.debug("Found next page")
             next_page = response.urljoin(next_page_url)
             yield scrapy.Request(next_page, callback=self.parse)
 

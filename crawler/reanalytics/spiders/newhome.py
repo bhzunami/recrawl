@@ -17,18 +17,7 @@ class Newhome(scrapy.Spider):
     """Newhome crawler
     """
     name = "newhome"
-
-    @staticmethod
-    def get_clean_url(url):
-        """Returns clean ad url for storing in database
-        Do not modify url for newhome
-        """
-        return url
-
-    def start_requests(self):
-        """Start method
-        """
-        urls = ['https://www.newhome.ch/de/kaufen/suchen/haus_wohnung/kanton_aargau/liste.aspx?pc=new',
+    start_urls = ['https://www.newhome.ch/de/kaufen/suchen/haus_wohnung/kanton_aargau/liste.aspx?pc=new',
                 'https://www.newhome.ch/de/kaufen/suchen/haus_wohnung/kanton_appenzellinnerrhoden/liste.aspx?pc=new',
                 'https://www.newhome.ch/de/kaufen/suchen/haus_wohnung/kanton_appenzellausserrhoden/liste.aspx?pc=new',
                 'https://www.newhome.ch/de/kaufen/suchen/haus_wohnung/kanton_baselland/liste.aspx?pc=new',
@@ -82,9 +71,19 @@ class Newhome(scrapy.Spider):
                 'https://www.newhome.ch/de/mieten/suchen/haus_wohnung/kanton_zug/liste.aspx?pc=new',
                 'https://www.newhome.ch/de/mieten/suchen/haus_wohnung/kanton_zuerich/liste.aspx?pc=new']
 
+    @staticmethod
+    def get_clean_url(url):
+        """Returns clean ad url for storing in database
+        Do not modify url for newhome
+        """
+        return url
+
+    def start_requests(self):
+        """Start method
+        """
         # Go through all urls
-        random.shuffle(urls)
-        for url in urls:
+        random.shuffle(self.urls)
+        for url in self.urls:
             yield scrapy.Request(url=url, callback=self.parse)
             
     def parse(self, response):
@@ -101,7 +100,6 @@ class Newhome(scrapy.Spider):
 
         next_page_url = response.xpath(next_page_path).extract_first()
         if next_page_url:
-            self.logger.debug("Found next page {}".format(next_page_url))
             next_page = response.urljoin(next_page_url)
             yield scrapy.Request(next_page, callback=self.parse)
 

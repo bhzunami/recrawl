@@ -7,15 +7,7 @@ from ..models import Ad
 
 class Immoscout24(scrapy.Spider):
     name = "immoscout24"
-
-    def get_clean_url(self, url):
-        """Returns clean ad url for storing in database
-        """
-        return url.split('?')[0]
-
-    def start_requests(self):
-        # the l parameter describes the canton id
-        urls = [
+    start_urls = [
             'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-aargau?ps=120',
             'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-appenzell-ai?ps=120',
             'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-appenzell-ar?ps=120',
@@ -70,8 +62,15 @@ class Immoscout24(scrapy.Spider):
             'https://www.immoscout24.ch/de/immobilien/mieten/kanton-zug?ps=120',
             'https://www.immoscout24.ch/de/immobilien/mieten/kanton-zuerich?ps=120']
 
-        random.shuffle(urls)
-        for url in urls:
+    def get_clean_url(self, url):
+        """Returns clean ad url for storing in database
+        """
+        return url.split('?')[0]
+
+    def start_requests(self):
+        # the l parameter describes the canton id
+        random.shuffle(self.urls)
+        for url in self.urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
@@ -89,7 +88,6 @@ class Immoscout24(scrapy.Spider):
         next_page_url = response.xpath(next_page_link).extract_first()
 
         if next_page_url:
-            self.logger.debug("Found next page: {}".format(next_page_url))
             next_page = response.urljoin(next_page_url)
             yield scrapy.Request(next_page, callback=self.parse)
 

@@ -24,6 +24,47 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 import pdb
 
+# Prepare log system, do not use scrpay as root logger 
+current_time = datetime.datetime.now()
+if not os.path.isdir('logs'):
+    os.mkdir('logs')
+
+SETTINGS = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'loggers': {
+        '': {
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'scrapy': {
+            'level': 'WARN',
+        },
+        'twisted': {
+            'level': 'ERROR',
+        },
+        'run': {
+            'level': 'INFO',
+        },
+        'reanalytics.middlewares.crawledURLCheck': {
+            'level': 'INFO',
+        }, 
+        'reanalytics': {
+            'level': 'ERROR',
+        }
+    }
+}
+# logging.basicConfig(
+#     filename='logs/log_crawler-{}-{}-{}.log'.format(
+#         current_time.day,
+#         current_time.month,
+#         current_time.year
+#     ),
+#     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+#     level=logging.INFO
+# )
+# logger = logging.getLogger("run")
+
 class Crawlers(Thread):
     def __init__(self, process, spiders):
         Thread.__init__(self)
@@ -96,27 +137,12 @@ class App(object):
 def main():
     # Wait 5 seconds until all containers are started
     time.sleep(5)
+    configure_logging(SETTINGS, install_root_handler=False)
     app = App()
     app.prepare_instances()
     app.runCrawlers()
     app.shutdown_instances()
 
 if __name__ == "__main__":
-    # Prepare log system, do not use scrpay as root logger 
-    configure_logging(install_root_handler=False)
-    current_time = datetime.datetime.now()
-    if not os.path.isdir('logs'):
-        os.mkdir('logs')
-    
-    logging.basicConfig(
-        filename='logs/log_crawler-{}-{}-{}.log'.format(
-            current_time.day,
-            current_time.month,
-            current_time.year
-        ),
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        level=logging.INFO
-    )
-    logging.getLogger().addHandler(logging.StreamHandler())
     main()
 

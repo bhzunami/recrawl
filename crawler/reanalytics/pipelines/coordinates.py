@@ -10,6 +10,7 @@ import logging
 import requests
 from ..settings import ADMIN_BASE_URL
 
+logger = logging.getLogger(__name__)
 
 class CoordinatesPipeline(object):
     """ Get longitude and latitude for a specific address from the api3.geo.admin.ch
@@ -18,13 +19,13 @@ class CoordinatesPipeline(object):
     def process_item(self, item, spider):
         """after item is processed
         """
-        logging.debug("Get Longitude and Latitude for item %s %s from spider %s",
+        logger.debug("Execute coordinate assignment for item %s %s from Spider[%s]",
                       item.get('street', None),
                       item.get('place', None),
                       spider.name)
 
         if not item.get('street', None) or 'auf anfrage' in item.get('street', '').lower():
-            logging.info("Ignore street %s for finding coordinates", item.get('street', None))
+            logger.info("Ignore street %s for finding coordinates", item.get('street', None))
             item['street'] = ''
 
         params = {'type': 'locations',
@@ -33,7 +34,7 @@ class CoordinatesPipeline(object):
 
         req = requests.get(ADMIN_BASE_URL, params=params)
         if req.status_code != 200:
-            logging.warning("Could not get long and lat for addres %s, %s",
+            logger.warning("Could not get long and lat for addres %s, %s",
                             item.get('street', None),
                             item.get('place', None))
             return item
@@ -43,12 +44,12 @@ class CoordinatesPipeline(object):
         item['address_fuzzy'] = False
         if response.get("fuzzy", False):
             item['address_fuzzy'] = True
-            logging.info("Request for address %s seems fuzzy", params.get('searchText', ''))
+            logger.info("Request for address %s seems fuzzy", params.get('searchText', ''))
 
         addresses = response.get('results', [])
         # Did not get an answer
         if len(addresses) != 1:
-            logging.warning("Could not get long lat for address %s", params.get('searchText', ''))
+            logger.warning("Could not get long lat for address %s", params.get('searchText', ''))
             return item
 
         address = addresses[0]
@@ -56,7 +57,7 @@ class CoordinatesPipeline(object):
         item['latitude'] = address.get('attrs', {}).get('lat', None)
         item['lv03_easting'] = address.get('attrs', {}).get('y', None)
         item['lv03_northing'] = address.get('attrs', {}).get('x', None)
-        logging.debug("Found long {} lat {} for address {}".format(item.get('longitude', None),
+        logger.debug("Found long {} lat {} for address {}".format(item.get('longitude', None),
                                                                    item.get('latitude', None),
                                                                    params.get('searchText', None)))
         return item

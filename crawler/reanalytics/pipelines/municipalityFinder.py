@@ -10,6 +10,8 @@ from models import Municipality
 from models.utils import extract_number, get_place, extract_municipality
 from ..settings import DATABASE_URL
 
+logger = logging.getLogger(__name__)
+
 class MunicipalityFinderPipeline(object):
 
     def open_spider(self, spider):
@@ -45,24 +47,24 @@ class MunicipalityFinderPipeline(object):
         # Only one was found
         if len(municipalities) == 1:
             municipality = municipalities[0]
-            logging.debug("Found exact one %s ", municipality.name)
+            logger.debug("Found exact one %s ", municipality.name)
 
         if len(municipalities) > 1:
-            logging.debug("Found more than one {} search for {}".format(len(municipalities), name))
+            logger.debug("Found more than one {} search for {}".format(len(municipalities), name))
             for mun in municipalities:
                 if mun.name.startswith(name) or name in mun.alternate_names:
                     municipality = mun
-                    logging.debug("Found the municipality '%s' for input: %s",
+                    logger.debug("Found the municipality '%s' for input: %s",
                                   municipality.name,
                                   item.get('place'))
                     break
 
         if municipality:
             item['municipality_id'] = municipality.id
-            logging.debug("Found municipality: {} {}".format(municipality.zip, municipality.name))
+            logger.debug("Found municipality: {} {}".format(municipality.zip, municipality.name))
         else:
             item['municipality_id'] = None
-            logging.warning("Could not find zip_code {} {} in database".format(zip_code, name))
+            logger.warning("Could not find zip_code {} {} in database".format(zip_code, name))
 
         session.close()
         return item

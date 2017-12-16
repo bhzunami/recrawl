@@ -12,8 +12,8 @@ NEWSPIDER_MODULE = 'reanalytics.spiders'
 
 # OWN SETTINGS:
 DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://localhost:5432/immo')
-#LOG_ENABLED = False
-LOG_LEVEL = 'WARN'
+#LOG_ENABLED = True
+#LOG_LEVEL = 'ERROR'
 
 PROXY = os.environ.get('PROXY_URL', 'http://127.0.0.1:8888/?noconnect') 
 API_SCRAPOXY = os.environ.get('API_SCRAPOXY', 'http://127.0.0.1:8889/api')
@@ -77,7 +77,7 @@ ITEM_PIPELINES = {
     'reanalytics.pipelines.duplicateCheck.DuplicateCheckPipeline': 130,
     'reanalytics.pipelines.coordinates.CoordinatesPipeline': 140,
     'reanalytics.pipelines.databaseWriter.DatabaseWriterPipeline': 200,
-#     'reanalytics.pipelines.jsonWriter.JSONWriterPipeline': 300,
+#    'reanalytics.pipelines.jsonWriter.JSONWriterPipeline': 300,
 }
 
 

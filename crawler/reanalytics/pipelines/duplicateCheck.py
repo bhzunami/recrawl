@@ -35,7 +35,7 @@ class DuplicateCheckPipeline(object):
         # wohnfläche
         # preis
         # ort
-        logging.debug("**** Check duplicate {}".format(self.session))
+        logger.debug("**** Check duplicate {}".format(self.session))
         municipality_id = item.get('municipality_id')
         objectType_id = item.get('obtype_id')
         num_rooms = utils.get_int(item.get('num_rooms'))

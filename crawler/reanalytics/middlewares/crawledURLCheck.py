@@ -10,6 +10,8 @@ from sqlalchemy import create_engine
 from models import Advertisement
 from ..settings import DATABASE_URL
 
+logger = logging.getLogger(__name__)
+
 class CrawledURLCheck(object):
 
     def __init__(self):
@@ -21,18 +23,23 @@ class CrawledURLCheck(object):
         """check if the url was already crawled
         """
         if type(spider).__name__ == "DefaultSpider":
-            return
+            return None
+
         clean_url = spider.get_clean_url(request.url)
-        logging.debug("Check if %s is already in database?", clean_url)
+
+        # Do not check start_urls because these are not added to the database
+        if clean_url in [spider.get_clean_url(u) for u in spider.start_urls]:
+            return None
+
+        logger.debug("Check if URL[{}] is in database for Spider[{}]".format(clean_url, spider.name))
         session = self.Session()
         advertisement = session.query(Advertisement).filter(Advertisement.url == clean_url).first()
         if advertisement:
-            logging.info("This url %s was already crawled update last seen", clean_url)
+            logger.debug("The URL '{}' was already crawled. Update last seen".format(clean_url))
             advertisement.last_seen = datetime.datetime.now()
             session.add(advertisement)
             session.commit()
             raise IgnoreRequest
 
         session.close()
-        logging.debug("URL %s was not found in database.", clean_url)
         return None

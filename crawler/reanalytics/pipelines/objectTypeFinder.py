@@ -17,7 +17,6 @@ class ObjectTypeFinderPipeline(object):
         Initializes database connection and sessionmaker.
         Creates deals table.
         """
-        logger.info("Object finder")
         engine = create_engine(DATABASE_URL)
         self.Session = sessionmaker(bind=engine, expire_on_commit=True)
         self.session = None
