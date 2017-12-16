@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-dropdb --username "$POSTGRES_ADMIN" immo
-dropuser immo
+dropdb --if-exists --username "$POSTGRES_ADMIN" immo
+dropuser --if-exists immo
 
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_ADMIN" postgres <<-EOSQL
     CREATE USER $POSTGRES_USER WITH PASSWORD '$POSTGRES_PASSWORD';
