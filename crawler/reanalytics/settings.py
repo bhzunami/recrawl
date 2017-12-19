@@ -3,6 +3,7 @@
 # Scrapy settings for reanalytics project
 #
 import os
+import datetime
 
 BOT_NAME = 'reanalytics'
 
@@ -11,8 +12,10 @@ NEWSPIDER_MODULE = 'reanalytics.spiders'
 
 # OWN SETTINGS:
 DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://localhost:5432/immo')
-#LOG_ENABLED = True
+#LOG_ENABLED = False
 #LOG_LEVEL = 'ERROR'
+LOG_STDOUT = True
+LOG_LEVEL = "ERROR"
 
 PROXY = os.environ.get('PROXY_URL', 'http://127.0.0.1:8888/?noconnect')
 API_SCRAPOXY = os.environ.get('API_SCRAPOXY', 'http://127.0.0.1:8889/api')
@@ -56,9 +59,9 @@ TELNETCONSOLE_ENABLED = False
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     'reanalytics.middlewares.crawledURLCheck.CrawledURLCheck': 100,
-    'scrapoxy.downloadmiddlewares.proxy.ProxyMiddleware': 101,
-    'scrapoxy.downloadmiddlewares.wait.WaitMiddleware': 102,
-    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
+#    'scrapoxy.downloadmiddlewares.proxy.ProxyMiddleware': 101,
+#    'scrapoxy.downloadmiddlewares.wait.WaitMiddleware': 102,
+#    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
 }
 
 # Enable or disable extensions
@@ -141,4 +144,64 @@ KEY_FIGURES = {
     'Referenz': 'reference_no', # immoscout24
     'Objekt-Referenz': 'reference_no', # urbanhome
     'Qualitätslabel': 'quality_label',  # newhome
+}
+
+# Logging configuration
+current_time = datetime.datetime.now()
+
+LOGGING_SETTINGS = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "simple": {
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        }
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "level": "ERROR",
+            "formatter": "simple",
+            "stream": "ext://sys.stdout"
+        },
+        "file_handler": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "INFO",
+            "formatter": "simple",
+            "filename": "logs/log_crawler-{}-{}-{}.log".format(
+                current_time.day,
+                current_time.month,
+                current_time.year),
+            "maxBytes": 10485760,
+            "backupCount": 20,
+            "encoding": "utf8"
+        }
+    },
+    "root": {
+        "level": "INFO",
+        "handlers": ["file_handler", "console"]
+    },
+    "loggers": {
+        "scrapy": {
+            "level": "INFO",
+            "handlers": ["console"],
+        },
+        "scrapy.core.engine": {
+            "level": "INFO",
+            "handlers": ["file_handler"],
+        },
+        "twisted": {
+            "level": "ERROR",
+            "handlers": ["file_handler"]
+        },
+        "run": {
+            "level": "INFO",
+            "handlers": ["console", "file_handler"]
+        },
+        "reanalytics": {
+            "level": "ERROR",
+            "handlers": ["console", "file_handler"],
+            "propagate": "yes",
+        }
+    }
 }

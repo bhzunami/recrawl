@@ -25,45 +25,10 @@ from sqlalchemy import create_engine
 import pdb
 
 # Prepare log system, do not use scrpay as root logger 
-current_time = datetime.datetime.now()
 if not os.path.isdir('logs'):
     os.mkdir('logs')
 
-SETTINGS = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'loggers': {
-        '': {
-            'level': 'ERROR',
-            'propagate': True,
-        },
-        'scrapy': {
-            'level': 'WARN',
-        },
-        'twisted': {
-            'level': 'ERROR',
-        },
-        'run': {
-            'level': 'INFO',
-        },
-        'reanalytics.middlewares.crawledURLCheck': {
-            'level': 'INFO',
-        }, 
-        'reanalytics': {
-            'level': 'ERROR',
-        }
-    }
-}
-# logging.basicConfig(
-#     filename='logs/log_crawler-{}-{}-{}.log'.format(
-#         current_time.day,
-#         current_time.month,
-#         current_time.year
-#     ),
-#     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-#     level=logging.INFO
-# )
-# logger = logging.getLogger("run")
+logger = logging.getLogger("run")
 
 class Crawlers(Thread):
     def __init__(self, process, spiders):
@@ -76,18 +41,19 @@ class Crawlers(Thread):
             self.process.crawl(spider)
 
         self.process.start()
-        logging.debug("Finish with crawler thread")
+        logger.debug("Finish with crawler thread")
 
 class App(object):
     def __init__(self):
         self.settings = get_project_settings()
         self.commander = Commander(self.settings.get('API_SCRAPOXY'),
                                    self.settings.get('API_SCRAPOXY_PASSWORD'))
+        configure_logging(settings=None, install_root_handler=False)
+        logging.config.dictConfig(self.settings['LOGGING_SETTINGS'])
 
-    
     def prepare_instances(self):
         if len(self.settings.get('DOWNLOADER_MIDDLEWARES', {})) <= 1:
-            logging.info("Do not run crawler over proxy")
+            logger.info("Do not run crawler over proxy")
             return
         min_sc, required_sc, max_sc = self.commander.get_scaling()
         required_sc = max_sc
@@ -98,25 +64,26 @@ class App(object):
 
     def runCrawlers(self):
         process = CrawlerProcess(self.settings)
+
         crawl_thread = Crawlers(process=process, spiders=[Homegate, Newhome, Immoscout24])
         crawl_thread.start()
         rounds = 0
         while crawl_thread.is_alive():
             if rounds == (4320):  # 4320*10(sleep) = 12h
-                logging.info("Run into time out")
+                logger.info("Run into time out")
                 break
             rounds += 1
             time.sleep(10)
 
-        logging.debug("Stopping all crawlers..")
+        logger.debug("Stopping all crawlers..")
         process.stop()
         while crawl_thread.is_alive():
-            logging.debug("Wait for crawlers to clean up...")
+            logger.debug("Wait for crawlers to clean up...")
             time.sleep(100)
 
     def shutdown_instances(self):
         if len(self.settings.get('DOWNLOADER_MIDDLEWARES', {})) <= 1:
-            logging.info("Nothing to stop, because no instances were started")
+            logger.info("Nothing to stop, because no instances were started")
             return
         min_sc, required_sc, max_sc = self.commander.get_scaling()
         self.commander.update_scaling(min_sc, 0, max_sc)
@@ -137,7 +104,6 @@ class App(object):
 def main():
     # Wait 5 seconds until all containers are started
     time.sleep(5)
-    configure_logging(SETTINGS, install_root_handler=False)
     app = App()
     app.prepare_instances()
     app.runCrawlers()

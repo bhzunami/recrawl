@@ -82,8 +82,8 @@ class Newhome(scrapy.Spider):
         """Start method
         """
         # Go through all urls
-        random.shuffle(self.urls)
-        for url in self.urls:
+        random.shuffle(self.start_urls)
+        for url in self.start_urls:
             yield scrapy.Request(url=url, callback=self.parse)
             
     def parse(self, response):
