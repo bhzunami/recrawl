@@ -112,7 +112,7 @@ class App(object):
         process.stop()
         while crawl_thread.is_alive():
             logging.debug("Wait for crawlers to clean up...")
-            time.sleep(5)
+            time.sleep(100)
 
     def shutdown_instances(self):
         if len(self.settings.get('DOWNLOADER_MIDDLEWARES', {})) <= 1:

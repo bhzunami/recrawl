@@ -16,6 +16,17 @@ services:
       - ./data/share:/tmp/share
     network_mode: bridge
 
+  metabase:
+    image: metabase/metabase
+    env_file:
+      - metabase/metabase.env
+      - metabase/metabase.secrets.env
+    links:
+      - database
+    ports:
+      - "49302:3000"
+    network_mode: bridge
+
   scrapoxy:
     build:
       context: ./scrapoxy

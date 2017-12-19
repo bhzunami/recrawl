@@ -2,12 +2,16 @@
 set -e
 
 dropdb --if-exists --username "$POSTGRES_ADMIN" immo
+dropdb --if-exists --username "$POSTGRES_ADMIN" metabase
 dropuser --if-exists immo
+
 
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_ADMIN" postgres <<-EOSQL
     CREATE USER $POSTGRES_USER WITH PASSWORD '$POSTGRES_PASSWORD';
     CREATE DATABASE $DATABASE_NAME OWNER $POSTGRES_USER;
     GRANT ALL PRIVILEGES ON DATABASE $DATABASE_NAME TO $POSTGRES_USER;
+    CREATE DATABASE metabase OWNER $POSTGRES_USER;
+    GRANT ALL PRIVILEGES ON DATABASE metabase TO $POSTGRES_USER
 EOSQL
 
 echo "Import schema"
