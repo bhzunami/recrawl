@@ -3,12 +3,14 @@
 #   -e PROVIDERS_AWSEC2_ACCESSKEYID='YOUR ACCESS KEY ID' \
 #   -e PROVIDERS_AWSEC2_SECRETACCESSKEY='YOUR SECRET ACCESS KEY' \
 #   -it -p 8888 -p 8889 fabienvauchelles/scrapoxy
+#
+# Use the newest version of scaproxy because the old had an issue when shutown a instance it was not removed
 
 FROM mhart/alpine-node:6
 EXPOSE 8888 8889
 
 
-# Install Scrapoxy
+# Install the newest Scrapoxy
 RUN npm install -g scrapoxy
 
 

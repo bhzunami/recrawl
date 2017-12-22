@@ -17,7 +17,7 @@ services:
     network_mode: bridge
 
   metabase:
-    image: metabase/metabase
+    image: metabase/metabase:v0.27.2
     env_file:
       - metabase/metabase.env
       - metabase/metabase.secrets.env
