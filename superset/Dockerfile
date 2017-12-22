@@ -37,6 +37,7 @@ RUN useradd -U -m superset && \
 # Configure Filesystem
 WORKDIR /home/superset
 COPY superset_config.py /home/superset/superset_config.py
+COPY startup.sh /home/superset/startup.sh
 
 # Deploy application
 #HEALTHCHECK CMD ["curl", "-f", "http://localhost:8088/health"]
