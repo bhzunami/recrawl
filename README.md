@@ -13,6 +13,7 @@ Every container needs his own environment variables which are set in the *.env f
 Every thing that can be configured should be done over an environment file for the docker container.
 
 ***scrapy.env***
+
 | Value           | Description   |
 | ----------------| ------------- |
 | PROXY_URL       | URL to reach the scrapoxy |
@@ -21,12 +22,14 @@ Every thing that can be configured should be done over an environment file for t
 | WAIT_FOR_START  | How long the scrapy should wait when started up before crawling |
 
 ***scrapy.secrets.env***
+
 | Value                   | Description   |
 | ------------------------| ------------- |
 | DATABASE_URL            | The database url |
 | API_SCRAPOXY_PASSWORD   | The password to login to the scrapoxy  |
 
 ***scrapoxy.env***
+
 | Value                                     | Description   |
 | ----------------------------------------- | ------------- |
 | PROVIDERS_AWSEC2_REGION                   | In which region should the proxy server start |
@@ -41,6 +44,7 @@ Every thing that can be configured should be done over an environment file for t
 | INSTANCE_AUTORESTART_MAXDELAY             | How long can an instance live at maximum |
 
 ***scrapoxy.secrets.env***
+
 | Value                             | Description   |
 | ----------------------------------| ------------- |
 | COMMANDER_PASSWORD                | The password for login in to the web interface of scrapoxy |
@@ -48,11 +52,13 @@ Every thing that can be configured should be done over an environment file for t
 | PROVIDERS_AWSEC2_SECRETACCESSKEY  | The amazon secret access key  |
 
 ***database.env***
+
 | Value                   | Description   |
 | ------------------------| ------------- |
 | PGDATA            | Where is the database stored in the filesystem |
 
 ***database.secrets.env***
+
 | Value              | Description   |
 | -------------------| ------------- |
 | POSTGRES_PASSWORD  | Password for the database |
