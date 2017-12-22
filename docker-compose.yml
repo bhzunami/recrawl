@@ -27,6 +27,28 @@ services:
       - "49302:3000"
     network_mode: bridge
 
+  superset:
+    build:
+      context: ./superset
+      dockerfile: Dockerfile
+    env_file:
+      - superset/superset.env
+      - superset/superset.secrets.env
+    ports:
+      - "49303:8088"
+    links:
+      - database
+      - redis
+    hostname: superset
+    network_mode: "bridge"
+    volumes:
+      - ./data/share:/tmp/share
+      
+  redis:
+    image: redis
+    restart: always
+    network_mode: bridge
+    
   scrapoxy:
     build:
       context: ./scrapoxy
