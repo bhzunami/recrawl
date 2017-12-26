@@ -111,6 +111,9 @@ class Newhome(scrapy.Spider):
         ad['url'] = self.get_clean_url(response.url)
         ad['buy'] = True if 'kaufen' in ad['url'] else False
 
+        images_path = '//div[contains(@class, "slick-slide") and not(contains(@class, "slick-cloned"))]'
+        ad['images'] = response.xpath(images_path+'/figure/img/@data-lazy').extract()
+
         # Owner
         owner = '//div[contains(@class, "provider-short")]/p/span/text()'
         ad['owner'] = ' '.join(response.xpath(owner).extract())

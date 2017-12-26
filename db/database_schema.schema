@@ -27,6 +27,7 @@ CREATE TABLE advertisements (
     -- raw_data text NOT NULL,
     crawler character varying(100) NOT NULL,
     url character varying(255) NOT NULL,
+    images character varying(2048),
     reference_no character varying(100),
     object_id character varying(100),
     living_area double precision,

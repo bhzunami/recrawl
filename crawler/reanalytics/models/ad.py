@@ -16,6 +16,7 @@ class Ad(scrapy.Item):
     reference_no = scrapy.Field()      # The offical ref number
     crawler = scrapy.Field()           # which company was crawled
     url = scrapy.Field()               # The url of the site
+    images = scrapy.Field()            # Comma seperated list of image urls
     available = scrapy.Field()
     street = scrapy.Field()
     place = scrapy.Field()

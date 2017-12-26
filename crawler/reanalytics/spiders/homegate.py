@@ -18,6 +18,7 @@ class Homegate(scrapy.Spider):
     """Homegate crawler
     """
     name = "homegate"
+    base_url = "https://homegate.ch"
     start_urls = ['https://www.homegate.ch/kaufen/immobilien/kanton-aargau/trefferliste?tab=list',
                 'https://www.homegate.ch/kaufen/immobilien/kanton-appenzellinnerrhoden/trefferliste?tab=list',
                 'https://www.homegate.ch/kaufen/immobilien/kanton-appenzellausserrhoden/trefferliste?tab=list',
@@ -115,6 +116,9 @@ class Homegate(scrapy.Spider):
         ad['crawler'] = 'homegate'
         ad['url'] = self.get_clean_url(response.url)
         ad['buy'] = True if 'kaufen' in ad['url'] else False
+
+        image_urls = response.xpath('//div[@id="detail-gallery-slides"]//img/@data-lazy').extract()
+        ad['images'] = ', '.join([self.base_url+url for url in image_urls])
 
         # Owner
         owner = '//div[contains(@class, "detail-owner")]/div[@class="infos"]/div[@class="description"]/p'

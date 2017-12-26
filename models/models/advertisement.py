@@ -19,6 +19,7 @@ class Advertisement(Base):
     reference_no = Column(String)      # The offical ref number
     crawler = Column(String)           # which company was crawled
     url = Column(String)               # The url of the site
+    images = Column(String)            # Comma seperated list of image urls
     available = Column(Date)
     street = Column(String)
     price_brutto = Column(Integer)
@@ -79,6 +80,7 @@ class Advertisement(Base):
         self.assign(data, 'quality_label')
         self.assign(data, 'address_fuzzy')
         self.assign(data, 'buy')
+        self.assign(data, 'images')
 
         self.crawled_at = self.crawled_at or datetime.datetime.now()
         self.last_seen = self.last_seen or datetime.datetime.now()
