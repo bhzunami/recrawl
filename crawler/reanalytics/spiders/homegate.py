@@ -136,10 +136,19 @@ class Homegate(scrapy.Spider):
         # Prices
         price_path = '//div[contains(@class, "detail-price")]/ul/li/span/span/text()'
         prices = response.xpath(price_path).extract()
-        if len(prices) > 1:
+        # Before the price there is a 'CHF'
+        if len(prices) == 6: # brutto, netto, additional
+            ad['price_brutto'] = prices[1].replace("'", "").replace(".–", "")
+            ad['price_netto'] = prices[3].replace("'", "").replace(".–", "")
+            ad['additional_costs'] = prices[5].replace("'", "").replace(".–", "")
+        elif len(prices) == 4: # price and netto
+            ad['price_brutto'] = prices[1].replace("'", "").replace(".–", "")
+            ad['price_netto'] = prices[3].replace("'", "").replace(".–", "")
+        if len(prices) == 2:
             ad['price_brutto'] = prices[1].replace("'", "").replace(".–", "")
         else:
             ad['price_brutto'] = prices[0]
+
 
         # Characteristics / Merkmale und Ausstattung
         characteristics_path = '//div[contains(@class, "detail-configuration")]/ul/li/text()'

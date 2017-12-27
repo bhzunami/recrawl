@@ -97,7 +97,7 @@ class Immoscout24(scrapy.Spider):
         ad['url'] = self.get_clean_url(response.url)
         ad['buy'] = True if 'kaufen' in ad['url'] else False
         ad['objecttype'] = response.url.split("/")[5].split("-")[0]
-        ad['images'] = response.xpath('//div[contains(@class, "swiper-lazy")]/img/@data-src').extract()
+        ad['images'] = ', '.join(response.xpath('//div[contains(@class, "swiper-lazy")]/img/@data-src').extract())
         ad['additional_data'] = {}
         ad['characteristics'] = {}
         # immoscout does have gibberish div names -> we are interessted in the h2 
