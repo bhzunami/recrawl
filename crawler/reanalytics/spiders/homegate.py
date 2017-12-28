@@ -144,7 +144,7 @@ class Homegate(scrapy.Spider):
         elif len(prices) == 4: # price and netto
             ad['price_brutto'] = prices[1].replace("'", "").replace(".–", "")
             ad['price_netto'] = prices[3].replace("'", "").replace(".–", "")
-        if len(prices) == 2:
+        elif len(prices) == 2:
             ad['price_brutto'] = prices[1].replace("'", "").replace(".–", "")
         else:
             ad['price_brutto'] = prices[0]

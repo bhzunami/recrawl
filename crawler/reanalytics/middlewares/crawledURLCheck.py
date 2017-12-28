@@ -35,7 +35,7 @@ class CrawledURLCheck(object):
         session = self.Session()
         advertisement = session.query(Advertisement).filter(Advertisement.url == clean_url).first()
         if advertisement:
-            logger.debug("The URL '{}' was already crawled. Update last seen".format(clean_url))
+            logger.info("The URL '{}' was already crawled. Update last seen".format(clean_url))
             advertisement.last_seen = datetime.datetime.now()
             session.add(advertisement)
             session.commit()
