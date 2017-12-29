@@ -108,6 +108,9 @@ ITEM_PIPELINES = {
 KEY_FIGURES = {
     'Verkaufspreis': 'price_brutto',  # homegate, immoscout24
     'Preis': 'price_brutto',  # newhome
+    'Bruttomiete (Monat)': 'price_brutto',  # immoscout24
+    'Nebenkosten (Monat)': 'additional_costs', # immoscout24
+    'Nettomiete (Monat)': 'price_netto', # immoscout24
     'Kaufpreis': 'price_brutto',  # immoscout24
     'Preis Garage': 'additional_costs',  # newhome
     'Preis Abstellplatz': 'additional_costs', # newhome
