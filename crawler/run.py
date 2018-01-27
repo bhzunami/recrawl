@@ -67,16 +67,7 @@ class App(object):
 
         crawl_thread = Crawlers(process=process, spiders=[Homegate, Newhome, Immoscout24])
         crawl_thread.start()
-        rounds = 0
-        while crawl_thread.is_alive():
-            if rounds == (4320):  # 4320*10(sleep) = 12h
-                logger.info("Run into time out")
-                break
-            rounds += 1
-            time.sleep(10)
-
-        logger.debug("Stopping all crawlers..")
-        process.stop()
+        # Wait until all crawlers stopped
         while crawl_thread.is_alive():
             logger.debug("Wait for crawlers to clean up...")
             time.sleep(100)
