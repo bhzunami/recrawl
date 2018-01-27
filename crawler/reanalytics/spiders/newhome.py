@@ -12,12 +12,27 @@ Author: N. Mauchle <nmauchle@gmail.com>
 import random
 import scrapy
 from ..models import Ad
+from scrapy_splash import SplashRequest
 
 class Newhome(scrapy.Spider):
     """Newhome crawler
     """
+    lua_script = """
+function main(splash)
+    local host = "localhost"
+    local port = 127.0.0.1
+
+    splash:on_request(function (request)
+       request:set_proxy{host, port}
+    end)
+
+    splash:go(splash.args.url)
+    return splash:html()
+end
+    """
     name = "newhome"
-    start_urls = ['https://www.newhome.ch/de/kaufen/suchen/haus_wohnung/kanton_aargau/liste.aspx?pc=new',
+    start_urls = ['https://www.newhome.ch/de/kaufen/suchen/haus_wohnung/kanton_aargau/liste.aspx?pc=new']
+    start_urls2 = ['https://www.newhome.ch/de/kaufen/suchen/haus_wohnung/kanton_aargau/liste.aspx?pc=new',
                 'https://www.newhome.ch/de/kaufen/suchen/haus_wohnung/kanton_appenzellinnerrhoden/liste.aspx?pc=new',
                 'https://www.newhome.ch/de/kaufen/suchen/haus_wohnung/kanton_appenzellausserrhoden/liste.aspx?pc=new',
                 'https://www.newhome.ch/de/kaufen/suchen/haus_wohnung/kanton_baselland/liste.aspx?pc=new',
@@ -84,7 +99,11 @@ class Newhome(scrapy.Spider):
         # Go through all urls
         random.shuffle(self.start_urls)
         for url in self.start_urls:
-            yield scrapy.Request(url=url, callback=self.parse)
+            yield SplashRequest(url, self.parse, endpoint='execute',
+                                args={'lua_source': self.lua_script})
+            #yield SplashRequest(url, self.parse, endpoint='render.json',
+#                                args={'html': 1})
+            # yield scrapy.Request(url=url, callback=self.parse)
             
     def parse(self, response):
         """Parse the page
@@ -94,14 +113,18 @@ class Newhome(scrapy.Spider):
         link_path = '//div[starts-with(@class, "item")]/div[@class="row"]/div[contains(@class, "detail")]/a/@href'
         for link in response.xpath(link_path).extract():
             next_add = response.urljoin(link)
-            yield scrapy.Request(next_add, callback=self.parse_ad)
+            yield SplashRequest(url, self.parse, endpoint='execute',
+                                args={'lua_source': self.lua_script})
+            #yield scrapy.Request(next_add, callback=self.parse_ad)
 
         next_page_path = '//ul[@class="pagination"]/li[contains(@class, "next")]/a/@href'
 
         next_page_url = response.xpath(next_page_path).extract_first()
         if next_page_url:
             next_page = response.urljoin(next_page_url)
-            yield scrapy.Request(next_page, callback=self.parse)
+            yield SplashRequest(url, self.parse, endpoint='execute',
+                                args={'lua_source': self.lua_script})
+            #yield scrapy.Request(next_page, callback=self.parse)
 
     def parse_ad(self, response):
         """Parse single add
@@ -113,7 +136,7 @@ class Newhome(scrapy.Spider):
 
         images_path = '//div[contains(@class, "slick-slide") and not(contains(@class, "slick-cloned"))]'
         ad['images'] = ', '.join(response.xpath(images_path+'/figure/img/@data-lazy').extract())
-
+        self.logger.warning(ad['images'])
         # Owner
         owner = '//div[contains(@class, "provider-short")]/p/span/text()'
         ad['owner'] = ' '.join(response.xpath(owner).extract())

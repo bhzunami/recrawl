@@ -2,10 +2,11 @@ version: '2.1'
 services:
   crawler:
     build:
-      context: .
-      dockerfile: Dockerfile-crawler
+      context: ./crawler
+      dockerfile: Dockerfile
     links:
       - scrapoxy
+      - splash
       - database
     env_file:
       - crawler/scrapy.env
@@ -48,14 +49,23 @@ services:
     image: redis
     restart: always
     network_mode: bridge
-    
+
+  splash:
+    image: scrapinghub/splash:latest
+    expose:
+      - 8050
+      - 5023
+    links:
+      - scrapoxy
+    network_mode: bridge
+
   scrapoxy:
     build:
       context: ./scrapoxy
       dockerfile: Dockerfile
     env_file:
-      - crawler/scrapoxy.env
-      - crawler/scrapoxy.secrets.env
+      - scrapoxy/scrapoxy.env
+      - scrapoxy/scrapoxy.secrets.env
     ports:
       - "49301:8889"
     expose:
@@ -65,8 +75,8 @@ services:
 
   database:
     build:
-      context: .
-      dockerfile: Dockerfile-db
+      context: ./db
+      dockerfile: Dockerfile
     volumes:
       - ./data/database:/var/lib/postgresql/data/pgdata
       - ./data/share:/tmp/share

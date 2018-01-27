@@ -18,11 +18,14 @@ LOG_STDOUT = True
 LOG_LEVEL = "ERROR"
 
 PROXY = os.environ.get('PROXY_URL', 'http://127.0.0.1:8888/?noconnect')
+SCRAPOXY_URL = os.environ.get('SCRAPOXY_URL', '127.0.0.1')
+SCRAPOXY_PORT = os.environ.get('SCRAPOXY_PORT', 8888)
 API_SCRAPOXY = os.environ.get('API_SCRAPOXY', 'http://127.0.0.1:8889/api')
 API_SCRAPOXY_PASSWORD = os.environ.get('API_SCRAPOXY_PASSWORD', 'CHANGE_THIS_PASSWORD')
 WAIT_FOR_SCALE = int(os.environ.get('WAIT_FOR_SCALE', 5))
 WAIT_FOR_START = int(os.environ.get('WAIT_FOR_START', 5))
 ADMIN_BASE_URL = 'https://api3.geo.admin.ch/rest/services/api/SearchServer'
+SPLASH_URL = os.environ.get('SPLASH_URL', 'http://localhost:8050')
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'
@@ -61,8 +64,17 @@ DOWNLOADER_MIDDLEWARES = {
     'reanalytics.middlewares.crawledURLCheck.CrawledURLCheck': 100,
     'scrapoxy.downloadmiddlewares.proxy.ProxyMiddleware': 101,
     'scrapoxy.downloadmiddlewares.wait.WaitMiddleware': 102,
+    'scrapy_splash.SplashCookiesMiddleware': 723,
+    'scrapy_splash.SplashMiddleware': 725,
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
 }
+
+SPIDER_MIDDLEWARES = {
+    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+}
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
@@ -163,7 +175,7 @@ LOGGING_SETTINGS = {
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
-            "level": "ERROR",
+            "level": "DEBUG",
             "formatter": "simple",
             "stream": "ext://sys.stdout"
         },

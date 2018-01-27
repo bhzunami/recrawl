@@ -1,6 +1,0 @@
-FROM postgres:9.6
-
-COPY ./db/create_db_docker.sh /docker-entrypoint-initdb.d/
-COPY ./db/database_schema.schema /docker-entrypoint-initdb.d/
-COPY ./db/municipalities_import.csv /docker-entrypoint-initdb.d/
-COPY ./db/object_types_import.csv /docker-entrypoint-initdb.d/

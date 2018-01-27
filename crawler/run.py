@@ -52,7 +52,7 @@ class App(object):
         logging.config.dictConfig(self.settings['LOGGING_SETTINGS'])
 
     def prepare_instances(self):
-        if len(self.settings.get('DOWNLOADER_MIDDLEWARES', {})) <= 1:
+        if len(self.settings.get('DOWNLOADER_MIDDLEWARES', {})) <= 5:
             logger.info("Do not run crawler over proxy")
             return
         min_sc, required_sc, max_sc = self.commander.get_scaling()
@@ -65,7 +65,8 @@ class App(object):
     def runCrawlers(self):
         process = CrawlerProcess(self.settings)
 
-        crawl_thread = Crawlers(process=process, spiders=[Homegate, Newhome, Immoscout24])
+        #crawl_thread = Crawlers(process=process, spiders=[Homegate, Newhome, Immoscout24])
+        crawl_thread = Crawlers(process=process, spiders=[Newhome])
         crawl_thread.start()
         rounds = 0
         while crawl_thread.is_alive():

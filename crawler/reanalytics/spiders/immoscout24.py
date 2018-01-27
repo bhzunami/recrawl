@@ -2,11 +2,16 @@
 
 import random
 import scrapy
+from scrapy_splash import SplashRequest
+
 from ..models import Ad
 
 
 class Immoscout24(scrapy.Spider):
     name = "immoscout24"
+    splash_args = {
+            'html': 1,
+        }
     start_urls = [
             'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-aargau?ps=120',
             'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-appenzell-ai?ps=120',
@@ -71,7 +76,13 @@ class Immoscout24(scrapy.Spider):
         # the l parameter describes the canton id
         random.shuffle(self.start_urls)
         for url in self.start_urls:
-            yield scrapy.Request(url=url, callback=self.parse)
+            yield SplashRequest(url, self.parse, endpoint='render.json',
+                                args=self.splash_args)
+            #yield scrapy.Request(url=url, callback=self.parse)
+
+
+
+        
 
     def parse(self, response):
         """ Parse the ad list """

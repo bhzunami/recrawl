@@ -23,6 +23,7 @@ queuelib==1.4.2
 requests==2.18.4
 scrapoxy==1.9
 Scrapy==1.4.0
+scrapy-splash==0.7.2
 service-identity==17.0.0
 six==1.11.0
 SQLAlchemy==1.1.15
