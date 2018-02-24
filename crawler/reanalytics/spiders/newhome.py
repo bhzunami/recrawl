@@ -114,6 +114,11 @@ class Newhome(scrapy.Spider):
         images_path = '//div[contains(@class, "slick-slide") and not(contains(@class, "slick-cloned"))]'
         ad['images'] = ', '.join(response.xpath(images_path+'/figure/img/@data-lazy').extract())
 
+        # Title
+        ad_title = response.xpath('head/title/text()').extract_first()
+        if ad_title:
+            ad['title'] = ad_title.split('|')[0].strip()
+
         # Owner
         owner = '//div[contains(@class, "provider-short")]/p/span/text()'
         ad['owner'] = ' '.join(response.xpath(owner).extract())

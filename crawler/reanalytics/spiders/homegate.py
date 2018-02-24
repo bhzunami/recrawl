@@ -120,6 +120,11 @@ class Homegate(scrapy.Spider):
         image_urls = response.xpath('//div[@id="detail-gallery-slides"]//img/@data-lazy').extract()
         ad['images'] = ', '.join([self.base_url+url for url in image_urls])
 
+        # Title
+        ad_title = response.xpath('head/title/text()').extract_first()
+        if ad_title:
+            ad['title'] = ad_title.split(',')[0].strip()
+
         # Owner
         owner = '//div[contains(@class, "detail-owner")]/div[@class="infos"]/div[@class="description"]/p'
         ad['owner'] = response.xpath(owner).extract_first()

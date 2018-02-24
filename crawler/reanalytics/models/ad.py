@@ -13,6 +13,7 @@ class Ad(scrapy.Item):
     rent and buy
     """
     object_id = scrapy.Field()         # The internal id of the company
+    title = scrapy.Field()             # The title of the ad
     reference_no = scrapy.Field()      # The offical ref number
     crawler = scrapy.Field()           # which company was crawled
     url = scrapy.Field()               # The url of the site

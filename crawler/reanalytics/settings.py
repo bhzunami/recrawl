@@ -25,7 +25,7 @@ WAIT_FOR_START = int(os.environ.get('WAIT_FOR_START', 5))
 ADMIN_BASE_URL = 'https://api3.geo.admin.ch/rest/services/api/SearchServer'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'
+USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True

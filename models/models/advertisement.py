@@ -15,6 +15,7 @@ class Advertisement(Base):
     __tablename__ = 'advertisements'
 
     id = Column(Integer, primary_key=True)
+    title = Column(String)
     object_id = Column(String)         # The internal id of the company
     reference_no = Column(String)      # The offical ref number
     crawler = Column(String)           # which company was crawled
@@ -81,6 +82,7 @@ class Advertisement(Base):
         self.assign(data, 'address_fuzzy')
         self.assign(data, 'buy')
         self.assign(data, 'images')
+        self.assign(data, 'title')
 
         self.crawled_at = self.crawled_at or datetime.datetime.now()
         self.last_seen = self.last_seen or datetime.datetime.now()
@@ -118,9 +120,11 @@ class Advertisement(Base):
 
     def __iter__(self):
         return iter([self.id,
+                    self.title,
                     self.object_id,
                     self.reference_no,
                     self.crawler,
+                    self.images,
                     self.url,
                     self.available,
                     self.street,
