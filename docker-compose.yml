@@ -67,6 +67,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-db
+    ports:
+      - "49305:5432"
     volumes:
       - ./data/database:/var/lib/postgresql/data/pgdata
       - ./data/share:/tmp/share

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-The ad is in the div result-items-list class
-and every reulst has the id resultItemPanel0 with the number
+https://devhints.io/xpath
 
 Links:
 https://www.homegate.ch/kaufen/immobilien/kanton-{kanton}/trefferliste?tab=list
@@ -122,6 +121,7 @@ class Homegate(scrapy.Spider):
 
         # Title
         ad_title = response.xpath('head/title/text()').extract_first()
+        self.logger.warning("HOMEGATE ad_TITLE: {}".format(ad_title))
         if ad_title:
             ad['title'] = ad_title.split(',')[0].strip()
 
