@@ -11,7 +11,7 @@ hyperlink==17.3.1
 idna==2.6
 incremental==17.5.0
 lxml==4.1.1
--e git+https://github.com/bhzunami/recrawl.git@a2fca389fbe08a29f92f806c36c28f56137e22c4#egg=models&subdirectory=models
+-e git+git@github.com:bhzunami/recrawl.git@03827182dfe7926b72ed7dff0318af05556180a6#egg=models&subdirectory=models
 parsel==1.2.0
 psycopg2==2.7.3.2
 pyasn1==0.3.7

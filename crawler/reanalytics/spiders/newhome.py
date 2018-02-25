@@ -116,7 +116,6 @@ class Newhome(scrapy.Spider):
 
         # Title
         ad_title = response.xpath('head/title/text()').extract_first()
-        self.logger.warning("NEWHOME ad_TITLE: {}".format(ad_title))
         if ad_title:
             ad['title'] = ad_title.split('|')[0].strip()
 
