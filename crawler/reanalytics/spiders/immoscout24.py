@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import random
+import json
 import scrapy
 from ..models import Ad
 
@@ -8,7 +9,7 @@ from ..models import Ad
 class Immoscout24(scrapy.Spider):
     name = "immoscout24"
     start_urls = [
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-aargau?ps=120',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-aargau?ps=120&pn=1',
             'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-appenzell-ai?ps=120',
             'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-appenzell-ar?ps=120',
             'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-basel-landschaft?ps=120',
@@ -77,19 +78,35 @@ class Immoscout24(scrapy.Spider):
         """ Parse the ad list """
 
         # find ads
-        ad_link_path = '//a[@class="item-title"]/@href'
+        ad_link_path = '//article//h3/a/@href'
 
         for link in response.xpath(ad_link_path).extract():
             next_ad = response.urljoin(link)
             yield scrapy.Request(next_ad, callback=self.parse_ad)
 
-        # find next page
-        next_page_link = '//a[contains(@class, "next") and not(contains(@class, "disabled"))]/@href'
-        next_page_url = response.xpath(next_page_link).extract_first()
+        # Immoscout has a script with all the informations stored. For the first only use it to get to the next page.
+        # It will be easier to use this for all 
+        # path to information
+        script = response.xpath("//script[@id='state']").extract_first()
+        json_value = '{%s}' % (script.split('{', 1)[1].rsplit('}', 1)[0],)
+        data = json.loads(json_value)
+        # ['pages']['searchResult']['resultData']['pagingData']
+        page_info = data.get('pages', {}).get('searchResult', {}).get('resultData', {}).get('pagingData', {})
 
+        next_page_url = find_next_page(response.url, page_info)
         if next_page_url:
             next_page = response.urljoin(next_page_url)
             yield scrapy.Request(next_page, callback=self.parse)
+
+    def find_next_page(self, url, page_info):
+        current_page = page_info.get('currentPage', None)
+        total_pages = page_info.get('totalPages', None)
+        if not current_page:
+            return None
+        if current_page + 1 <= total_pages:
+            next_page = current_page + 1
+            return url.replace('pn={}'.format(current_page), 'pn={}'.format(next_page))
+        return None
 
     def parse_ad(self, response):
         ad = Ad()
