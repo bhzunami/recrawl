@@ -50,9 +50,7 @@ services:
     network_mode: bridge
     
   scrapoxy:
-    build:
-      context: ./scrapoxy
-      dockerfile: Dockerfile
+    image: fabienvauchelles/scrapoxy
     env_file:
       - crawler/scrapoxy.env
       - crawler/scrapoxy.secrets.env

@@ -10,58 +10,58 @@ class Immoscout24(scrapy.Spider):
     name = "immoscout24"
     start_urls = [
             'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-aargau?ps=120&pn=1',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-appenzell-ai?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-appenzell-ar?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-basel-landschaft?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-basel-stadt?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-bern?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-freiburg?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-genf?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-glarus?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-graubuenden?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-jura?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-luzern?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-neuenburg?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-nidwalden?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-obwalden?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-st-gallen?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-schaffhausen?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-schwyz?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-solothurn?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-thurgau?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-tessin?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-uri?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-waadt?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-wallis?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-zug?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-zuerich?ps=120',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-appenzell-ai?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-appenzell-ar?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-basel-landschaft?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-basel-stadt?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-bern?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-freiburg?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-genf?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-glarus?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-graubuenden?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-jura?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-luzern?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-neuenburg?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-nidwalden?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-obwalden?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-st-gallen?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-schaffhausen?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-schwyz?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-solothurn?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-thurgau?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-tessin?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-uri?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-waadt?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-wallis?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-zug?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/kaufen/kanton-zuerich?ps=120&pn=1',
             # RENTS
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-aargau?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-appenzell-ai?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-appenzell-ar?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-basel-landschaft?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-basel-stadt?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-bern?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-freiburg?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-genf?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-glarus?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-graubuenden?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-jura?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-luzern?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-neuenburg?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-nidwalden?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-obwalden?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-st-gallen?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-schaffhausen?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-schwyz?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-solothurn?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-thurgau?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-tessin?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-uri?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-waadt?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-wallis?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-zug?ps=120',
-            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-zuerich?ps=120']
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-aargau?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-appenzell-ai?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-appenzell-ar?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-basel-landschaft?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-basel-stadt?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-bern?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-freiburg?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-genf?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-glarus?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-graubuenden?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-jura?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-luzern?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-neuenburg?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-nidwalden?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-obwalden?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-st-gallen?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-schaffhausen?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-schwyz?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-solothurn?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-thurgau?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-tessin?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-uri?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-waadt?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-wallis?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-zug?ps=120&pn=1',
+            'https://www.immoscout24.ch/de/immobilien/mieten/kanton-zuerich?ps=120&pn=1']
 
     def get_clean_url(self, url):
         """Returns clean ad url for storing in database
@@ -79,21 +79,20 @@ class Immoscout24(scrapy.Spider):
 
         # find ads
         ad_link_path = '//article//h3/a/@href'
-
         for link in response.xpath(ad_link_path).extract():
             next_ad = response.urljoin(link)
             yield scrapy.Request(next_ad, callback=self.parse_ad)
 
         # Immoscout has a script with all the informations stored. For the first only use it to get to the next page.
-        # It will be easier to use this for all 
+        # TODO: Use JSON data as source for the advertisements
+        #  
         # path to information
         script = response.xpath("//script[@id='state']").extract_first()
         json_value = '{%s}' % (script.split('{', 1)[1].rsplit('}', 1)[0],)
         data = json.loads(json_value)
-        # ['pages']['searchResult']['resultData']['pagingData']
         page_info = data.get('pages', {}).get('searchResult', {}).get('resultData', {}).get('pagingData', {})
 
-        next_page_url = find_next_page(response.url, page_info)
+        next_page_url = self.find_next_page(response.url, page_info)
         if next_page_url:
             next_page = response.urljoin(next_page_url)
             yield scrapy.Request(next_page, callback=self.parse)
