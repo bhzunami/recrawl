@@ -22,7 +22,9 @@ Crawling real estates from switzerland to analyze the market.
 Start the application with `docker-compose`:
 
 ```shell
-docker-compuse up -d
+docker-compose up -d
+
+docker-compose up -d --force-recreate
 ```
 
 # Design
