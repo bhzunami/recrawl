@@ -104,3 +104,6 @@ env
 *secrets*
 data/
 .vscode
+
+# Pycharm
+.idea/
