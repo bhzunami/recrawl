@@ -79,3 +79,5 @@ services:
 volumes:
   pgdata:
     external: true
+  #share:
+  #  external: true
