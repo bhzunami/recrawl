@@ -72,7 +72,7 @@ Every thing that can be configured should be done over an environment file for t
 
 | Value                   | Description   |
 | ------------------------| ------------- |
-| DATABASE_URL            | The database url |
+| DATABASE_URL            | The database url sqlalchemy: `postgresql+psycopg2://USER:PASSWORD@database:5432/DBNAME` |
 | API_SCRAPOXY_PASSWORD   | The password to login to the scrapoxy  |
 
 ***scrapoxy.env***
