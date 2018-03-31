@@ -107,3 +107,6 @@ data/
 
 # Pycharm
 .idea/
+
+# Platform-specific environment-variables
+specific.env
