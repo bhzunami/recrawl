@@ -68,16 +68,10 @@ services:
     ports:
       - "49305:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data/pgdata
+      - ./data/database:/var/lib/postgresql/data/pgdata
       - ./data/share:/tmp/share
     env_file:
       - db/database.env
       - db/database.secrets.env
     network_mode: bridge
     
-# docker volume create --name pgdata -d local
-volumes:
-  pgdata:
-    external: true
-  #share:
-  #  external: true
