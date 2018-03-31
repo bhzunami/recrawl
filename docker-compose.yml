@@ -74,3 +74,4 @@ services:
       - db/database.env
       - db/database.secrets.env
     network_mode: bridge
+    

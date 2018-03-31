@@ -22,7 +22,10 @@ Crawling real estates from switzerland to analyze the market.
 Start the application with `docker-compose`:
 
 ```shell
-docker-compuse up -d
+docker-compose up -d
+
+# Recreate containers even if their configuration and image haven't changed. Doesn't affect docker volumes
+docker-compose up -d --force-recreate
 ```
 
 # Design
@@ -70,7 +73,7 @@ Every thing that can be configured should be done over an environment file for t
 
 | Value                   | Description   |
 | ------------------------| ------------- |
-| DATABASE_URL            | The database url |
+| DATABASE_URL            | The database url sqlalchemy: `postgresql+psycopg2://USER:PASSWORD@database:5432/DBNAME` |
 | API_SCRAPOXY_PASSWORD   | The password to login to the scrapoxy  |
 
 ***scrapoxy.env***
@@ -107,8 +110,46 @@ Every thing that can be configured should be done over an environment file for t
 | Value              | Description   |
 | -------------------| ------------- |
 | POSTGRES_PASSWORD  | Password for the database |
-| POSTGRES_USER      | User for the database |
-| DATABASE_NAME      | The database name |
+| POSTGRES_USER      | User for the database `recrawl` |
+| DATABASE_NAME      | The database name `recrawl` - could be different, but then CREATE DATABASE needed |
+| POSTGRES_ADMIN     | Postgres Admin User `postgres` |
+
+***metabase.env***
+
+| Value                   | Description   |
+| ------------------------| ------------- |
+| MB_DB_TYPE              | What type of database is used `postgres` |
+
+***metabase.secrets.env***
+
+| Value              | Description   |
+| -------------------| ------------- |
+| MB_DB_DBNAME       | The database name for metabase: `metabase` |
+| MB_DB_PORT         | Port of the database 5432 |
+| MB_DB_USER         | User for the database `recrawl` |
+| MB_DB_PASS         | Password for the database |
+| MB_DB_HOST         | Hostname of the database - corresponds to docker-compose service name: `database` |
+
+***superset.env***
+
+| Value                   | Description   |
+| ------------------------| ------------- |
+| ROW_LIMIT               | Max limit of rows |
+| SUPERSET_WORKERS        | No. of workers |
+
+***superset.secrets.env***
+
+| Value              | Description   |
+| -------------------| ------------- |
+| DATABASE_USER      | User for the database `recrawl` |
+| DATABASE_PASSWORD  | Password for the database |
+| DATABASE_NAME      | The database name for superset: superset |
+| DATABASE_HOST      | Hostname of the database - corresponds to docker-compose service name: `database` |
+| SUPERSET_USER      | User for superset login: superset |
+| SUPERSET_PASSWORD  | User for superset login |
+| SUPERSET_FIRSTNAME | Firstname of superset User |
+| SUPERSET_LASTNAME  | Lastname of superset User |
+| SUPERSET_EMAIL     | Email of superset User |
 
 #### Amazon EC2
 

@@ -104,3 +104,9 @@ env
 *secrets*
 data/
 .vscode
+
+# Pycharm
+.idea/
+
+# Platform-specific environment-variables
+specific.env
