@@ -38,9 +38,6 @@ RUN useradd -U -m superset && \
 WORKDIR /home/superset
 COPY superset_config.py /home/superset/superset_config.py
 COPY startup.sh /home/superset/startup.sh
-# Remove windows \r linefeed in shellscript using dos2unix
-RUN apt-get update && apt-get install -y dos2unix
-RUN dos2unix /home/superset/startup.sh && apt-get --purge remove -y dos2unix && rm -rf /var/lib/apt/lists/*
 
 # Deploy application
 #HEALTHCHECK CMD ["curl", "-f", "http://localhost:8088/health"]

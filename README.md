@@ -24,6 +24,7 @@ Start the application with `docker-compose`:
 ```shell
 docker-compose up -d
 
+# Recreate containers even if their configuration and image haven't changed. Doesn't affect docker volumes
 docker-compose up -d --force-recreate
 ```
 
