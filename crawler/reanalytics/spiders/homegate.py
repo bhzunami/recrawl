@@ -122,7 +122,11 @@ class Homegate(scrapy.Spider):
         # Title
         ad_title = response.xpath('head/title/text()').extract_first()
         if ad_title:
-            ad['title'] = ad_title.split(',')[0].strip()
+            splitted_ad_title = ad_title.split(',')
+            if len(splitted_ad_title) == 1:
+                ad['title'] = splitted_ad_title[0].strip()
+            else:
+                ad['title'] = ' '.join(splitted_ad_title[0:-1]).strip()
 
         # Owner
         owner = '//div[contains(@class, "detail-owner")]/div[@class="infos"]/div[@class="description"]/p'
