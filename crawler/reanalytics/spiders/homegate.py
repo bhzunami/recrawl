@@ -117,7 +117,7 @@ class Homegate(scrapy.Spider):
         ad['buy'] = True if 'kaufen' in ad['url'] else False
 
         image_urls = response.xpath('//div[@id="detail-gallery-slides"]//img/@data-lazy').extract()
-        ad['images'] = ', '.join([self.base_url+url for url in image_urls])
+        ad['images'] = ', '.join([url for url in image_urls])
 
         # Title
         ad_title = response.xpath('head/title/text()').extract_first()
