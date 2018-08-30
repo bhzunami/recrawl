@@ -2,9 +2,11 @@
 
 import random
 import json
+import re
 import scrapy
 from ..models import Ad
 
+ROOM_PATTERN = re.compile('\\bzimmer', re.I)
 
 class Immoscout24(scrapy.Spider):
     name = "immoscout24"
@@ -113,7 +115,12 @@ class Immoscout24(scrapy.Spider):
         ad['url'] = self.get_clean_url(response.url)
         ad['buy'] = True if 'kaufen' in ad['url'] else False
         ad['objecttype'] = response.url.split("/")[5].split("-")[0]
-        ad['images'] = ', '.join(response.xpath('//div[contains(@class, "swiper-lazy")]/img/@data-src').extract())
+
+        # Image src is loaded by javascript so get the url from the json
+        #ad['images'] = ', '.join(response.xpath('//div[contains(@class, "swiper-lazy")]/img/@data-src').extract())
+        data = self.get_json_data(response)
+        images = data.get('pages', {}).get('detail', {}).get('propertyDetails', {}).get('detailsData', {}).get('images', [])
+        ad['images'] = self.extract_images(images)
 
         # Title
         ad_title = response.xpath('head/title/text()').extract_first()
@@ -133,7 +140,8 @@ class Immoscout24(scrapy.Spider):
             if not title:
                 continue
             title = title.lower()
-            if 'zimmer' in title:
+            match_room = ROOM_PATTERN.search(title)
+            if match_room:
                 ad['num_rooms'] = float(title.split()[0])
             if 'standort' in title:
                 address =  article.xpath('p/text()').extract()
@@ -182,3 +190,22 @@ class Immoscout24(scrapy.Spider):
                     except KeyError:
                         ad['characteristics'][key] = value.extract()
         yield ad
+
+    def get_json_data(self, response):
+        script = response.xpath("//script[@id='state']").extract_first()
+        json_value = '{%s}' % (script.split('{', 1)[1].rsplit('}', 1)[0],)
+        return json.loads(json_value)
+
+    def extract_images(self, images_json):
+        images = []
+        for image in images_json:
+            url_template = image['url']
+            width = image['originalWidth']
+            height = image['originalHeight']
+            url = url_template.replace('{width}', '{}'.format(width)) \
+                .replace('{height}', '{}'.format(height)) \
+                .replace('{resizemode}', '3') \
+                .replace('{quality}', '90')
+            images.append(url)
+        return images
+
