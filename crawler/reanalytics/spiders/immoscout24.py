@@ -120,7 +120,7 @@ class Immoscout24(scrapy.Spider):
         #ad['images'] = ', '.join(response.xpath('//div[contains(@class, "swiper-lazy")]/img/@data-src').extract())
         data = self.get_json_data(response)
         images = data.get('pages', {}).get('detail', {}).get('propertyDetails', {}).get('detailsData', {}).get('images', [])
-        ad['images'] = self.extract_images(images)
+        ad['images'] = ', '.join(self.extract_images(images))
 
         # Title
         ad_title = response.xpath('head/title/text()').extract_first()
